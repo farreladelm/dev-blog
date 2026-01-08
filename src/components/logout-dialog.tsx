@@ -19,8 +19,9 @@ export const LogoutDialog = () => {
 
     return (
         <Dialog>
-
-            <DialogTrigger className="w-full hover:underline text-sm text-left px-2 py-1.5">Logout</DialogTrigger>
+            <DialogTrigger className="w-full hover:underline hover:bg-accent rounded-sm text-sm text-left px-2 py-1.5 cursor-pointer">
+                Logout
+            </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Are you absolutely sure?</DialogTitle>

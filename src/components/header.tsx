@@ -19,10 +19,10 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { getAvatarFallback, avatarVariants } from "@/lib/avatarFallback";
 import { LogoutDialog } from "./logout-dialog";
+import ProfileAvatar from "./profile-avatar";
 
 const Header = async () => {
     const authUser = await getSession();
-    const { initials, colorIndex } = getAvatarFallback(authUser?.username);
 
     return (
         <header className="border-b border-border bg-card">
@@ -35,26 +35,30 @@ const Header = async () => {
                 </div>
                 {!authUser ? (
                     <nav className="space-x-4">
-                        <Link href="/login">
-                            <Button variant="link">Login</Button>
-                        </Link>
-                        <Link href="/register">
-                            <Button variant="outline">Create Account</Button>
-                        </Link>
+                        <Button variant="link" asChild>
+
+                            <Link href="/login">
+                                Login
+                            </Link>
+                        </Button>
+                        <Button variant="outline" asChild>
+                            <Link href="/register">
+                                Create Account
+                            </Link>
+
+                        </Button>
                     </nav>
                 ) : (
                     <nav className="flex gap-4 items-center">
-                        <Link href="/articles/new">
-                            <Button variant="outline">
+                        <Button variant="outline" asChild>
+                            <Link href="/articles/new">
                                 <IoAdd />
                                 New Article
-                            </Button>
-                        </Link>
+                            </Link>
+                        </Button>
                         <DropdownMenu>
                             <DropdownMenuTrigger className="cursor-pointer" asChild>
-                                <Avatar>
-                                    <AvatarFallback className={avatarVariants[colorIndex]}>{initials}</AvatarFallback>
-                                </Avatar>
+                                <ProfileAvatar username={authUser.username} />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="end" sideOffset={10}>
                                 <DropdownMenuLabel>My Account</DropdownMenuLabel>

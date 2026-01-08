@@ -6,6 +6,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { Hash, X } from "lucide-react";
 import { MAX_ARTICLE_TAGS } from "@/constants/article";
 import { toast } from "sonner";
+import { Badge } from "../ui/badge";
 
 type Props = {
     value: string[];
@@ -91,9 +92,9 @@ export default function TagInput({ value, onChange }: Props) {
         <div className="space-y-2 px-4 md:px-8 lg:px-12">
             <div className="flex flex-wrap gap-2  p-2">
                 {value.map((tag) => (
-                    <span
+                    <Badge
                         key={tag}
-                        className="bg-muted px-2 py-1 rounded text-sm flex items-center gap-1"
+                        variant="outline"
                     >
                         <Hash size={12} className="text-red-300" />
                         {tag}
@@ -103,7 +104,7 @@ export default function TagInput({ value, onChange }: Props) {
                         >
                             <X size={12} />
                         </button>
-                    </span>
+                    </Badge>
                 ))}
 
                 <input

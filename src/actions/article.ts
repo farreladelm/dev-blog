@@ -7,7 +7,12 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { STATUS } from "@/constants/article";
-import { ArticleDraft, CreateArticleActionState } from "@/lib/types";
+import {
+  ActionResult,
+  ArticleDraft,
+  CreateArticleActionState,
+  PublishedArticle,
+} from "@/lib/types";
 import { ArticleStatus } from "@/app/generated/prisma/enums";
 
 const articleSchema = z.object({
@@ -139,4 +144,36 @@ export async function togglePublishAction(slug: string) {
   revalidatePath(`/articles/${slug}`);
   revalidatePath("/");
   return { success: true };
+}
+
+export async function getAllPublishedArticlesAction(): Promise<
+  ActionResult<PublishedArticle[]>
+> {
+  try {
+    const articles = await prisma.article.findMany({
+      where: { status: "PUBLISHED" },
+      orderBy: { publishedAt: "desc" },
+      include: {
+        author: {
+          select: {
+            username: true,
+            email: true,
+          },
+        },
+        tags: {
+          select: {
+            tag: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return { data: articles };
+  } catch (error) {
+    return { error: "Failed to fetch articles" };
+  }
 }

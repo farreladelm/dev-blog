@@ -1,6 +1,9 @@
-import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/app/generated/prisma/client";
 
-export type Article = typeof prisma.article;
+export type ActionResult<T> = {
+  data?: T;
+  error?: string;
+};
 
 export type ActionState<TFields extends string> =
   | {
@@ -24,3 +27,23 @@ export type ArticleDraft = {
   body: string;
   tags: string[];
 };
+
+export type PublishedArticle = Prisma.ArticleGetPayload<{
+  include: {
+    author: {
+      select: {
+        username: true;
+        email: true;
+      };
+    };
+    tags: {
+      select: {
+        tag: {
+          select: {
+            name: true;
+          };
+        };
+      };
+    };
+  };
+}>;

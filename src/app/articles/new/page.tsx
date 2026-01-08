@@ -16,76 +16,76 @@ import { toast } from "sonner";
 
 
 export default function NewArticlePage() {
-    const [mode, setMode] = useState<"edit" | "preview">("edit");
-    const [draft, setDraft] = useState<ArticleDraft>({
-        title: "",
-        body: "",
-        tags: [],
-    });
+  const router = useRouter();
 
-    const createActionWithDraft = createArticleAction.bind(null, draft);
+  const [mode, setMode] = useState<"edit" | "preview">("edit");
+  const [draft, setDraft] = useState<ArticleDraft>({
+    title: "",
+    body: "",
+    tags: [],
+  });
 
-    const [data, action, isPending] = useActionState(createActionWithDraft, undefined);
+  const createActionWithDraft = createArticleAction.bind(null, draft);
 
-    const router = useRouter();
+  const [data, action, isPending] = useActionState(createActionWithDraft, undefined);
 
-    useEffect(() => {
-        if (!data) return;
+  useEffect(() => {
+    if (!data) return;
 
-        if (data?.success) {
-            localStorage.removeItem(DRAFT_KEY);
+    if (data?.success) {
+      localStorage.removeItem(DRAFT_KEY);
 
-            router.push("/articles");
-        } else if (!data?.success) {
-            toast.error(data?.error || "Failed to create article.");
-        }
-    }, [data, router])
+      router.push("/articles");
+    } else if (!data?.success) {
+      toast.error(data?.error || "Failed to create article.");
+    }
+  }, [data, router])
 
 
-    useEffect(() => {
-        const savedDraft = localStorage.getItem(DRAFT_KEY);
-        if (savedDraft) {
-            try {
-                setDraft(JSON.parse(savedDraft));
+  useEffect(() => {
+    const savedDraft = localStorage.getItem(DRAFT_KEY);
+    if (savedDraft) {
+      try {
+        setDraft(JSON.parse(savedDraft));
 
-            } catch (e) {
-                console.error("Failed to parse saved draft:", e);
+      } catch (e) {
+        console.error("Failed to parse saved draft:", e);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
+    }, DEBOUNCE_DELAY);
+
+    return () => clearTimeout(timeout);
+  }, [draft])
+
+
+  return (
+    <>
+      <ArticleHeader mode={mode} onModeChange={setMode} />
+      <main className="container mx-auto p-4 max-w-4xl">
+        <form action={action}>
+          <Card className="py-4 md:py-8">
+            {mode === "edit" ?
+              <ArticleDraftEditor draft={draft} onDraftChange={setDraft} />
+              :
+              <MarkdownPreview title={draft.title} body={draft.body} />
             }
-        }
-    }, []);
+          </Card >
 
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            localStorage.setItem(DRAFT_KEY, JSON.stringify(draft))
-        }, DEBOUNCE_DELAY);
-
-        return () => clearTimeout(timeout);
-    }, [draft])
-
-
-    return (
-        <>
-            <ArticleHeader mode={mode} onModeChange={setMode} />
-            <main className="container mx-auto p-4 max-w-4xl">
-                <form action={action}>
-                    <Card className="py-4 md:py-8">
-                        {mode === "edit" ?
-                            <ArticleDraftEditor draft={draft} onDraftChange={setDraft} />
-                            :
-                            <MarkdownPreview title={draft.title} content={draft.body} />
-                        }
-                    </Card >
-
-                    <div className="mt-4 space-x-4">
-                        <Button type="submit" name="status" value={STATUS.PUBLISHED} disabled={isPending}>
-                            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Publish"}
-                        </Button>
-                        <Button type="submit" variant="ghost" name="status" value={STATUS.DRAFT}>
-                            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Save as Draft"}
-                        </Button>
-                    </div>
-                </form>
-            </main >
-        </>
-    )
+          <div className="mt-4 space-x-4">
+            <Button type="submit" name="status" value={STATUS.PUBLISHED} disabled={isPending}>
+              {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Publish"}
+            </Button>
+            <Button type="submit" variant="ghost" name="status" value={STATUS.DRAFT}>
+              {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Save as Draft"}
+            </Button>
+          </div>
+        </form>
+      </main >
+    </>
+  )
 }
