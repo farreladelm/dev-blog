@@ -9,7 +9,7 @@ import MarkdownPreview from "@/components/article/markdown-preview";
 import { ArticleDraft } from "@/lib/types";
 import { DEBOUNCE_DELAY, DRAFT_KEY, STATUS } from "@/constants/article";
 import { Button } from "@/components/ui/button";
-import { createArticleAction } from "@/actions/article";
+import { createArticle } from "@/actions/article";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -25,19 +25,26 @@ export default function NewArticlePage() {
     tags: [],
   });
 
-  const createActionWithDraft = createArticleAction.bind(null, draft);
+  const createActionWithDraft = createArticle.bind(null, draft);
 
   const [data, action, isPending] = useActionState(createActionWithDraft, undefined);
 
   useEffect(() => {
     if (!data) return;
 
+    console.log("Create Article Action Data:", data);
+
     if (data?.success) {
       localStorage.removeItem(DRAFT_KEY);
 
       router.push("/articles");
     } else if (!data?.success) {
-      toast.error(data?.error || "Failed to create article.");
+      if (data?.error) toast.error(data.error);
+      if (data?.fieldErrors) {
+        Object.values(data.fieldErrors).forEach(error => {
+          if (error) toast.error(error);
+        });
+      }
     }
   }, [data, router])
 

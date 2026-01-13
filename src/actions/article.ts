@@ -16,13 +16,16 @@ import {
 import { ArticleStatus } from "@/app/generated/prisma/enums";
 
 const articleSchema = z.object({
-  title: z.string().min(1).max(200),
-  body: z.string().min(1),
-  tags: z.array(z.string().min(1)).optional(),
+  title: z
+    .string()
+    .min(1, "Title cannot be empty")
+    .max(200, "Title is too long"),
+  body: z.string().min(1, "Body cannot be empty"),
+  tags: z.array(z.string().min(1).max(30)).optional(),
   status: z.enum([STATUS.DRAFT, STATUS.PUBLISHED]).optional(),
 });
 
-export async function createArticleAction(
+export async function createArticle(
   draft: ArticleDraft,
   _: CreateArticleActionState | undefined,
   formData: FormData
@@ -62,6 +65,7 @@ export async function createArticleAction(
     const publishedAt = isPublished ? new Date() : null;
 
     await prisma.$transaction(async (tx) => {
+      // create article
       const createdArticle = await tx.article.create({
         data: {
           title: data.title,
@@ -73,6 +77,7 @@ export async function createArticleAction(
         },
       });
 
+      // handle tags
       if (data.tags && data.tags.length > 0) {
         for (const name of data.tags) {
           const tag = await tx.tag.upsert({
@@ -106,7 +111,7 @@ export async function createArticleAction(
   }
 }
 
-export async function deleteArticleAction(slug: string) {
+export async function deleteArticle(slug: string) {
   const session = await getSession();
   if (!session) {
     return { error: "Unauthorized" };
@@ -123,7 +128,7 @@ export async function deleteArticleAction(slug: string) {
   redirect("/articles");
 }
 
-export async function togglePublishAction(slug: string) {
+export async function toggleArticlePublicity(slug: string) {
   const session = await getSession();
   if (!session) {
     return { error: "Unauthorized" };
@@ -146,7 +151,7 @@ export async function togglePublishAction(slug: string) {
   return { success: true };
 }
 
-export async function getAllPublishedArticlesAction(): Promise<
+export async function getAllPublishedArticles(): Promise<
   ActionResult<PublishedArticle[]>
 > {
   try {
@@ -157,7 +162,7 @@ export async function getAllPublishedArticlesAction(): Promise<
         author: {
           select: {
             username: true,
-            email: true,
+            name: true,
           },
         },
         tags: {

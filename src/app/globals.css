@@ -129,21 +129,21 @@ body {
 }
 
 .prose h1 {
-  font-size: 2.5rem !important;
+  font-size: 2rem !important;
   font-weight: 800 !important;
 }
 
 .prose h2 {
-  font-size: 2rem !important;
-  font-weight: 700 !important;
-}
-
-.prose h3 {
   font-size: 1.75rem !important;
   font-weight: 700 !important;
 }
 
-.prose h4 {
+.prose h3 {
   font-size: 1.5rem !important;
+  font-weight: 700 !important;
+}
+
+.prose h4 {
+  font-size: 1.25rem !important;
   font-weight: 600 !important;
 }

@@ -33,7 +33,7 @@ export type PublishedArticle = Prisma.ArticleGetPayload<{
     author: {
       select: {
         username: true;
-        email: true;
+        name: true;
       };
     };
     tags: {

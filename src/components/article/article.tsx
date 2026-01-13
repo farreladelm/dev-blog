@@ -13,14 +13,14 @@ export default function Article({ article }: { article: PublishedArticle }) {
                 <div className="px-4 py-2 flex items-center gap-3 w-fit">
                     <ProfileAvatar username={article.author.username} />
                     <div className="flex flex-col">
-                        <span className="font-medium group-hover:underline">{article.author.username}</span>
-                        <span className="text-xs text-muted-foreground">{article.author.email}</span>
+                        <span className="font-medium group-hover:underline">{article.author.name}</span>
+                        <span className="text-xs text-muted-foreground">{article.author.username}</span>
                     </div>
                 </div>
             </Link>
-            <article className="px-15 space-y-2">
+            <article className="ps-15 pe-4 flex flex-col gap-2 h-full">
                 <h1 className="text-2xl font-bold">{article.title || "Untitled Article"}</h1>
-                <div className="flex gap-1">
+                <div className="flex gap-1 mb-auto flex-wrap">
                     {article.tags.length > 0 && (
                         article.tags.map((tag) => (
                             <Badge variant="outline" asChild key={tag.tag.name}>

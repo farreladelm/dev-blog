@@ -22,3 +22,19 @@ export async function searchTags(query: string) {
 
   return tags.map((t) => t.name);
 }
+
+export async function getPopularTags(limit = 10) {
+  const tags = await prisma.tag.findMany({
+    orderBy: {
+      posts: {
+        _count: "desc",
+      },
+    },
+    take: limit,
+    select: {
+      name: true,
+    },
+  });
+
+  return tags.map((t) => t.name);
+}

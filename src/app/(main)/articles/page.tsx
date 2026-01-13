@@ -10,7 +10,6 @@ export default function ArticlesPage() {
             <Suspense fallback={<ArticleSkeleton />}>
                 <Articles />
             </Suspense>
-            <aside className="w-64 shrink-0"></aside>
         </div>
     )
 }

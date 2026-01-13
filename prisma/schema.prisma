@@ -21,23 +21,36 @@ model User {
   username  String   @unique
   password  String
   bio       String?
+  avatarImage String?
   articles  Article[]
   createdAt DateTime @default(now())
 }
 
 model Article {
-  id        String        @id @default(uuid())
-  title     String
-  slug      String        @unique
-  body      String
-  status    ArticleStatus @default(DRAFT)
-  authorId  String
-  author    User          @relation(fields: [authorId], references: [id])
-  tags      ArticleTag[]
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  publishedAt DateTime?
+  id            String        @id @default(uuid())
+  title         String
+  slug          String        @unique
+  body          String
+  excerpt       String?
+  coverImage    String?
+  readingTime   Int           @default(1)
+  views         Int           @default(0)
+  likes         Int           @default(0)
+
+  status        ArticleStatus @default(DRAFT)
+  publishedAt   DateTime?
+
+  authorId      String
+  author        User          @relation(fields: [authorId], references: [id])
+  tags          ArticleTag[]
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([status, publishedAt])
+  @@index([views])
 }
+
 
 model Tag {
   id    String        @id @default(uuid())
