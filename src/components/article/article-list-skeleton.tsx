@@ -1,17 +1,18 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { Card } from "../ui/card"
 
-export default function ArticleSkeleton() {
+export default function ArticleListSkeleton() {
     return (
-        <div className="w-full flex flex-col gap-2">
-            <ArticleSkeletonCard />
-            <ArticleSkeletonCard />
-            <ArticleSkeletonCard />
+        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-2">
+            <ArticleCardSkeleton />
+            <ArticleCardSkeleton />
+            <ArticleCardSkeleton />
+            <ArticleCardSkeleton />
         </div>
     )
 }
 
-function ArticleSkeletonCard() {
+function ArticleCardSkeleton() {
     return (
         <Card className="gap-4 w-full">
 

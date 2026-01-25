@@ -26,9 +26,9 @@ const Header = async () => {
 
     return (
         <header className="border-b border-border bg-card">
-            <div className="container mx-auto flex h-16 items-center justify-between gap-2 px-4">
+            <div className="container mx-auto flex h-16 items-center justify-between gap-2 px-4 3xl:px-4 lg:px-20">
                 <div className="flex gap-4 items-center">
-                    <Link href="/" className="text-3xl">
+                    <Link href="/articles" className="text-3xl">
                         <FaLaptopCode />
                     </Link>
                     <SearchBar />

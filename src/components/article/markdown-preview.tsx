@@ -1,22 +1,28 @@
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import MarkdownRenderer from "../markdown-renderer";
+import UserDetail from "./user-detail";
 
 export default function MarkdownPreview({ title, body }: { title: string; body: string }) {
     return (
-        <article className="prose prose-lg dark:prose-invert max-w-none space-y-4 md:space-y-8 p-4 md:p-8 lg:p-12 ">
-            <h1 className="min-h-16 text-4xl font-black">{title || "Untitled Article"}</h1>
-            {body ? (
-                <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    rehypePlugins={[rehypeRaw]}
-                >
-                    {body}
-                </ReactMarkdown>
+        <>
+            <CardHeader>
+                <UserDetail name={"Your Name"} username={"username"} />
+                <CardTitle>
+                    <h1 className="text-4xl font-bold">
+                        {title}
+                    </h1>
+                </CardTitle>
 
-            ) : (
-                <p className="text-muted-foreground italic">No content yet. Switch to Edit mode to start writing.</p>
-            )}
-        </article>
+
+                <CardDescription className="flex flex-wrap mt-6 gap-8 text-sm">
+                    <p>Likes 0</p>
+                    <p>View 0</p>
+                </CardDescription>
+
+            </CardHeader>
+            <CardContent className="pt-6 border-t">
+                <MarkdownRenderer body={body} />
+            </CardContent>
+        </>
     )
 }

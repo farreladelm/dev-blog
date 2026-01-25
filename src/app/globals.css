@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -128,22 +129,8 @@ body {
   font-family: var(--font-montserrat), sans-serif;
 }
 
-.prose h1 {
-  font-size: 2rem !important;
-  font-weight: 800 !important;
-}
-
-.prose h2 {
-  font-size: 1.75rem !important;
-  font-weight: 700 !important;
-}
-
+.prose h1,
+.prose h2,
 .prose h3 {
-  font-size: 1.5rem !important;
-  font-weight: 700 !important;
-}
-
-.prose h4 {
-  font-size: 1.25rem !important;
-  font-weight: 600 !important;
+  @apply text-2xl;
 }

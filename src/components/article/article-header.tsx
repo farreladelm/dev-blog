@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { FaLaptopCode } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 
 export default function NewArticleHeader(
@@ -8,7 +9,7 @@ export default function NewArticleHeader(
 ) {
 
     return (
-        <header className="">
+        <header className="relative">
             <div className="container mx-auto max-w-4xl flex h-16 items-center justify-between gap-2 px-4">
                 <div className="flex gap-4 items-center">
                     <Link href="/articles" className="text-3xl">
@@ -31,8 +32,10 @@ export default function NewArticleHeader(
                         onClick={() => onModeChange("preview")}
                     >Preview</Button>
                 </nav>
-
             </div>
+            <Link href="/articles">
+                <X className="absolute top-4 right-4 h-6 w-6" />
+            </Link>
         </header>
     )
 }

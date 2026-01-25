@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getPopularTags, searchTags } from "@/actions/tag";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Hash, Loader2, X } from "lucide-react";
@@ -69,7 +69,7 @@ export default function TagInput({ value, onChange }: Props) {
     }, [debouncedInput, isFocused, value]);
 
 
-    const addTag = (tag: string) => {
+    const addTag = useCallback((tag: string) => {
         if (value.length === MAX_ARTICLE_TAGS) {
             toast.warning(`You can only add up to ${MAX_ARTICLE_TAGS} tags.`);
 
@@ -82,11 +82,16 @@ export default function TagInput({ value, onChange }: Props) {
         onChange([...value, name]);
         setInput("");
         setSuggestions([]);
-    };
+    }, [value, onChange]);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        console.log(e.key);
         if (e.key === "Enter") {
             e.preventDefault();
+            addTag(input);
+        }
+
+        if (e.key === " ") {
             addTag(input);
         }
 
@@ -157,8 +162,12 @@ export default function TagInput({ value, onChange }: Props) {
                         {!loading && suggestions.map((tag) => (
                             <button
                                 key={tag}
-                                onClick={() => addTag(tag)}
-                                className="block w-full text-left px-3 py-2 hover:bg-muted text-sm"
+                                type="button"
+                                onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    addTag(tag);
+                                }}
+                                className="block w-full text-left px-3 py-2 hover:bg-muted text-sm cursor-pointer"
                             >
                                 {tag}
                             </button>

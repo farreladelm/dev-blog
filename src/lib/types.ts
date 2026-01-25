@@ -34,6 +34,7 @@ export type PublishedArticle = Prisma.ArticleGetPayload<{
       select: {
         username: true;
         name: true;
+        avatarImage: true;
       };
     };
     tags: {
@@ -47,3 +48,8 @@ export type PublishedArticle = Prisma.ArticleGetPayload<{
     };
   };
 }>;
+
+export type PublishedArticlesPaginated = {
+  articles: PublishedArticle[];
+  hasMore: boolean;
+};

@@ -8,11 +8,10 @@ import ArticleDraftEditor from "@/components/article/article-draft-editor";
 import MarkdownPreview from "@/components/article/markdown-preview";
 import { ArticleDraft } from "@/lib/types";
 import { DEBOUNCE_DELAY, DRAFT_KEY, STATUS } from "@/constants/article";
-import { Button } from "@/components/ui/button";
 import { createArticle } from "@/actions/article";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import ArticleSubmitButtons from "@/components/article/article-submit-buttons";
 
 
 export default function NewArticlePage() {
@@ -83,14 +82,7 @@ export default function NewArticlePage() {
             }
           </Card >
 
-          <div className="mt-4 space-x-4">
-            <Button type="submit" name="status" value={STATUS.PUBLISHED} disabled={isPending}>
-              {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Publish"}
-            </Button>
-            <Button type="submit" variant="ghost" name="status" value={STATUS.DRAFT}>
-              {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Save as Draft"}
-            </Button>
-          </div>
+          <ArticleSubmitButtons />
         </form>
       </main >
     </>

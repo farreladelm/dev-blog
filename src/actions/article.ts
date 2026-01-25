@@ -12,8 +12,16 @@ import {
   ArticleDraft,
   CreateArticleActionState,
   PublishedArticle,
+  PublishedArticlesPaginated,
 } from "@/lib/types";
 import { ArticleStatus } from "@/app/generated/prisma/enums";
+import { resolve } from "path";
+
+const tagSchema = z
+  .string()
+  .min(1, "Tag cannot be empty")
+  .max(30, "Tag is too long")
+  .regex(/^\S+$/, "Tag must not contain spaces");
 
 const articleSchema = z.object({
   title: z
@@ -21,14 +29,14 @@ const articleSchema = z.object({
     .min(1, "Title cannot be empty")
     .max(200, "Title is too long"),
   body: z.string().min(1, "Body cannot be empty"),
-  tags: z.array(z.string().min(1).max(30)).optional(),
+  tags: z.array(tagSchema).optional(),
   status: z.enum([STATUS.DRAFT, STATUS.PUBLISHED]).optional(),
 });
 
 export async function createArticle(
   draft: ArticleDraft,
   _: CreateArticleActionState | undefined,
-  formData: FormData
+  formData: FormData,
 ): Promise<CreateArticleActionState> {
   const session = await getSession();
 
@@ -151,18 +159,26 @@ export async function toggleArticlePublicity(slug: string) {
   return { success: true };
 }
 
-export async function getAllPublishedArticles(): Promise<
-  ActionResult<PublishedArticle[]>
-> {
+export async function getPublishedArticlesPaginated(
+  page: number = 1,
+  limit: number = 8,
+): Promise<ActionResult<PublishedArticlesPaginated>> {
   try {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const skip = (page - 1) * limit;
+
     const articles = await prisma.article.findMany({
       where: { status: "PUBLISHED" },
       orderBy: { publishedAt: "desc" },
+      skip,
+      take: limit + 1, // Fetch one extra
       include: {
         author: {
           select: {
             username: true,
             name: true,
+            avatarImage: true,
           },
         },
         tags: {
@@ -177,8 +193,50 @@ export async function getAllPublishedArticles(): Promise<
       },
     });
 
-    return { data: articles };
+    const hasMore = articles.length > limit;
+    const articlesData = hasMore ? articles.slice(0, limit) : articles;
+
+    return {
+      data: {
+        articles: articlesData,
+        hasMore,
+      },
+    };
   } catch (error) {
     return { error: "Failed to fetch articles" };
+  }
+}
+
+export async function getArticleBySlug(
+  slug: string,
+): Promise<ActionResult<PublishedArticle>> {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const article = await prisma.article.findUniqueOrThrow({
+      where: { slug },
+      include: {
+        author: {
+          select: {
+            username: true,
+            name: true,
+            avatarImage: true,
+          },
+        },
+        tags: {
+          select: {
+            tag: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return { data: article };
+  } catch (error) {
+    return { error: "Failed to fetch article" };
   }
 }
