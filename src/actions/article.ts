@@ -241,7 +241,9 @@ export async function toggleArticlePublicity(slug: string) {
 export async function getPublishedArticlesPaginated(
   page: number = 1,
   limit: number = 8,
-): Promise<ActionResult<{ articles: Article[]; hasMore: boolean }>> {
+): Promise<
+  ActionResult<{ articles: ArticleWithUserAndTag[]; hasMore: boolean }>
+> {
   try {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -486,6 +488,20 @@ export async function getArticlesByAuthor(username: string) {
       where: {
         author: { username },
         ...(status && { status }),
+      },
+      include: {
+        author: {
+          select: {
+            username: true,
+            name: true,
+            avatarImage: true,
+          },
+        },
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
       },
       orderBy: [{ createdAt: "desc" }, { publishedAt: "desc" }],
     });

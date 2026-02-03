@@ -30,7 +30,7 @@ export function ArticleList({ articles, userId }: ArticleListClientProps) {
 
     return (
         <>
-            <div className="grid auto-rows-fr gap-4 w-full">
+            <div className="grid auto-rows-fr gap-2 w-full">
                 {articles.map(article => (
                     <UserArticleCard
                         key={article.id}

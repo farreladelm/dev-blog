@@ -30,9 +30,18 @@ export type UserMinAggregateOutputType = {
   name: string | null
   username: string | null
   password: string | null
+  location: string | null
   bio: string | null
   avatarImage: string | null
+  skillsOrLanguages: string | null
+  availableFor: string | null
+  githubUrl: string | null
+  twitterUrl: string | null
+  websiteUrl: string | null
+  jobTitle: string | null
+  education: string | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -41,9 +50,18 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   username: string | null
   password: string | null
+  location: string | null
   bio: string | null
   avatarImage: string | null
+  skillsOrLanguages: string | null
+  availableFor: string | null
+  githubUrl: string | null
+  twitterUrl: string | null
+  websiteUrl: string | null
+  jobTitle: string | null
+  education: string | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -52,9 +70,18 @@ export type UserCountAggregateOutputType = {
   name: number
   username: number
   password: number
+  location: number
   bio: number
   avatarImage: number
+  skillsOrLanguages: number
+  availableFor: number
+  githubUrl: number
+  twitterUrl: number
+  websiteUrl: number
+  jobTitle: number
+  education: number
   createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -65,9 +92,18 @@ export type UserMinAggregateInputType = {
   name?: true
   username?: true
   password?: true
+  location?: true
   bio?: true
   avatarImage?: true
+  skillsOrLanguages?: true
+  availableFor?: true
+  githubUrl?: true
+  twitterUrl?: true
+  websiteUrl?: true
+  jobTitle?: true
+  education?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -76,9 +112,18 @@ export type UserMaxAggregateInputType = {
   name?: true
   username?: true
   password?: true
+  location?: true
   bio?: true
   avatarImage?: true
+  skillsOrLanguages?: true
+  availableFor?: true
+  githubUrl?: true
+  twitterUrl?: true
+  websiteUrl?: true
+  jobTitle?: true
+  education?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -87,9 +132,18 @@ export type UserCountAggregateInputType = {
   name?: true
   username?: true
   password?: true
+  location?: true
   bio?: true
   avatarImage?: true
+  skillsOrLanguages?: true
+  availableFor?: true
+  githubUrl?: true
+  twitterUrl?: true
+  websiteUrl?: true
+  jobTitle?: true
+  education?: true
   createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -171,9 +225,18 @@ export type UserGroupByOutputType = {
   name: string
   username: string
   password: string
+  location: string | null
   bio: string | null
   avatarImage: string | null
+  skillsOrLanguages: string | null
+  availableFor: string | null
+  githubUrl: string | null
+  twitterUrl: string | null
+  websiteUrl: string | null
+  jobTitle: string | null
+  education: string | null
   createdAt: Date
+  updatedAt: Date
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -203,9 +266,18 @@ export type UserWhereInput = {
   name?: Prisma.StringFilter<"User"> | string
   username?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
+  location?: Prisma.StringNullableFilter<"User"> | string | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   avatarImage?: Prisma.StringNullableFilter<"User"> | string | null
+  skillsOrLanguages?: Prisma.StringNullableFilter<"User"> | string | null
+  availableFor?: Prisma.StringNullableFilter<"User"> | string | null
+  githubUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  twitterUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  websiteUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  jobTitle?: Prisma.StringNullableFilter<"User"> | string | null
+  education?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   articles?: Prisma.ArticleListRelationFilter
   likedArticles?: Prisma.ArticleLikeListRelationFilter
 }
@@ -216,9 +288,18 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   username?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  skillsOrLanguages?: Prisma.SortOrderInput | Prisma.SortOrder
+  availableFor?: Prisma.SortOrderInput | Prisma.SortOrder
+  githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  twitterUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  websiteUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  jobTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  education?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   articles?: Prisma.ArticleOrderByRelationAggregateInput
   likedArticles?: Prisma.ArticleLikeOrderByRelationAggregateInput
 }
@@ -232,9 +313,18 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   name?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
+  location?: Prisma.StringNullableFilter<"User"> | string | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   avatarImage?: Prisma.StringNullableFilter<"User"> | string | null
+  skillsOrLanguages?: Prisma.StringNullableFilter<"User"> | string | null
+  availableFor?: Prisma.StringNullableFilter<"User"> | string | null
+  githubUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  twitterUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  websiteUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  jobTitle?: Prisma.StringNullableFilter<"User"> | string | null
+  education?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   articles?: Prisma.ArticleListRelationFilter
   likedArticles?: Prisma.ArticleLikeListRelationFilter
 }, "id" | "email" | "username">
@@ -245,9 +335,18 @@ export type UserOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   username?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  skillsOrLanguages?: Prisma.SortOrderInput | Prisma.SortOrder
+  availableFor?: Prisma.SortOrderInput | Prisma.SortOrder
+  githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  twitterUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  websiteUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  jobTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  education?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -262,9 +361,18 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
+  location?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   bio?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   avatarImage?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  skillsOrLanguages?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  availableFor?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  githubUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  twitterUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  websiteUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  jobTitle?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  education?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
 export type UserCreateInput = {
@@ -273,9 +381,18 @@ export type UserCreateInput = {
   name?: string
   username: string
   password: string
+  location?: string | null
   bio?: string | null
   avatarImage?: string | null
+  skillsOrLanguages?: string | null
+  availableFor?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  websiteUrl?: string | null
+  jobTitle?: string | null
+  education?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   articles?: Prisma.ArticleCreateNestedManyWithoutAuthorInput
   likedArticles?: Prisma.ArticleLikeCreateNestedManyWithoutUserInput
 }
@@ -286,9 +403,18 @@ export type UserUncheckedCreateInput = {
   name?: string
   username: string
   password: string
+  location?: string | null
   bio?: string | null
   avatarImage?: string | null
+  skillsOrLanguages?: string | null
+  availableFor?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  websiteUrl?: string | null
+  jobTitle?: string | null
+  education?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   articles?: Prisma.ArticleUncheckedCreateNestedManyWithoutAuthorInput
   likedArticles?: Prisma.ArticleLikeUncheckedCreateNestedManyWithoutUserInput
 }
@@ -299,9 +425,18 @@ export type UserUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillsOrLanguages?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  availableFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   articles?: Prisma.ArticleUpdateManyWithoutAuthorNestedInput
   likedArticles?: Prisma.ArticleLikeUpdateManyWithoutUserNestedInput
 }
@@ -312,9 +447,18 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillsOrLanguages?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  availableFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   articles?: Prisma.ArticleUncheckedUpdateManyWithoutAuthorNestedInput
   likedArticles?: Prisma.ArticleLikeUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -325,9 +469,18 @@ export type UserCreateManyInput = {
   name?: string
   username: string
   password: string
+  location?: string | null
   bio?: string | null
   avatarImage?: string | null
+  skillsOrLanguages?: string | null
+  availableFor?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  websiteUrl?: string | null
+  jobTitle?: string | null
+  education?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UserUpdateManyMutationInput = {
@@ -336,9 +489,18 @@ export type UserUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillsOrLanguages?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  availableFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -347,9 +509,18 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillsOrLanguages?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  availableFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -358,9 +529,18 @@ export type UserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   username?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
+  skillsOrLanguages?: Prisma.SortOrder
+  availableFor?: Prisma.SortOrder
+  githubUrl?: Prisma.SortOrder
+  twitterUrl?: Prisma.SortOrder
+  websiteUrl?: Prisma.SortOrder
+  jobTitle?: Prisma.SortOrder
+  education?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -369,9 +549,18 @@ export type UserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   username?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
+  skillsOrLanguages?: Prisma.SortOrder
+  availableFor?: Prisma.SortOrder
+  githubUrl?: Prisma.SortOrder
+  twitterUrl?: Prisma.SortOrder
+  websiteUrl?: Prisma.SortOrder
+  jobTitle?: Prisma.SortOrder
+  education?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -380,9 +569,18 @@ export type UserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   username?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  location?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   avatarImage?: Prisma.SortOrder
+  skillsOrLanguages?: Prisma.SortOrder
+  availableFor?: Prisma.SortOrder
+  githubUrl?: Prisma.SortOrder
+  twitterUrl?: Prisma.SortOrder
+  websiteUrl?: Prisma.SortOrder
+  jobTitle?: Prisma.SortOrder
+  education?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -436,9 +634,18 @@ export type UserCreateWithoutArticlesInput = {
   name?: string
   username: string
   password: string
+  location?: string | null
   bio?: string | null
   avatarImage?: string | null
+  skillsOrLanguages?: string | null
+  availableFor?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  websiteUrl?: string | null
+  jobTitle?: string | null
+  education?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   likedArticles?: Prisma.ArticleLikeCreateNestedManyWithoutUserInput
 }
 
@@ -448,9 +655,18 @@ export type UserUncheckedCreateWithoutArticlesInput = {
   name?: string
   username: string
   password: string
+  location?: string | null
   bio?: string | null
   avatarImage?: string | null
+  skillsOrLanguages?: string | null
+  availableFor?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  websiteUrl?: string | null
+  jobTitle?: string | null
+  education?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   likedArticles?: Prisma.ArticleLikeUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -476,9 +692,18 @@ export type UserUpdateWithoutArticlesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillsOrLanguages?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  availableFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   likedArticles?: Prisma.ArticleLikeUpdateManyWithoutUserNestedInput
 }
 
@@ -488,9 +713,18 @@ export type UserUncheckedUpdateWithoutArticlesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillsOrLanguages?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  availableFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   likedArticles?: Prisma.ArticleLikeUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -500,9 +734,18 @@ export type UserCreateWithoutLikedArticlesInput = {
   name?: string
   username: string
   password: string
+  location?: string | null
   bio?: string | null
   avatarImage?: string | null
+  skillsOrLanguages?: string | null
+  availableFor?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  websiteUrl?: string | null
+  jobTitle?: string | null
+  education?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   articles?: Prisma.ArticleCreateNestedManyWithoutAuthorInput
 }
 
@@ -512,9 +755,18 @@ export type UserUncheckedCreateWithoutLikedArticlesInput = {
   name?: string
   username: string
   password: string
+  location?: string | null
   bio?: string | null
   avatarImage?: string | null
+  skillsOrLanguages?: string | null
+  availableFor?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  websiteUrl?: string | null
+  jobTitle?: string | null
+  education?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
   articles?: Prisma.ArticleUncheckedCreateNestedManyWithoutAuthorInput
 }
 
@@ -540,9 +792,18 @@ export type UserUpdateWithoutLikedArticlesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillsOrLanguages?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  availableFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   articles?: Prisma.ArticleUpdateManyWithoutAuthorNestedInput
 }
 
@@ -552,9 +813,18 @@ export type UserUncheckedUpdateWithoutLikedArticlesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillsOrLanguages?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  availableFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  websiteUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   articles?: Prisma.ArticleUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
@@ -604,9 +874,18 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   username?: boolean
   password?: boolean
+  location?: boolean
   bio?: boolean
   avatarImage?: boolean
+  skillsOrLanguages?: boolean
+  availableFor?: boolean
+  githubUrl?: boolean
+  twitterUrl?: boolean
+  websiteUrl?: boolean
+  jobTitle?: boolean
+  education?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
   articles?: boolean | Prisma.User$articlesArgs<ExtArgs>
   likedArticles?: boolean | Prisma.User$likedArticlesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -618,9 +897,18 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   username?: boolean
   password?: boolean
+  location?: boolean
   bio?: boolean
   avatarImage?: boolean
+  skillsOrLanguages?: boolean
+  availableFor?: boolean
+  githubUrl?: boolean
+  twitterUrl?: boolean
+  websiteUrl?: boolean
+  jobTitle?: boolean
+  education?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -629,9 +917,18 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   username?: boolean
   password?: boolean
+  location?: boolean
   bio?: boolean
   avatarImage?: boolean
+  skillsOrLanguages?: boolean
+  availableFor?: boolean
+  githubUrl?: boolean
+  twitterUrl?: boolean
+  websiteUrl?: boolean
+  jobTitle?: boolean
+  education?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -640,12 +937,21 @@ export type UserSelectScalar = {
   name?: boolean
   username?: boolean
   password?: boolean
+  location?: boolean
   bio?: boolean
   avatarImage?: boolean
+  skillsOrLanguages?: boolean
+  availableFor?: boolean
+  githubUrl?: boolean
+  twitterUrl?: boolean
+  websiteUrl?: boolean
+  jobTitle?: boolean
+  education?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "username" | "password" | "bio" | "avatarImage" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "username" | "password" | "location" | "bio" | "avatarImage" | "skillsOrLanguages" | "availableFor" | "githubUrl" | "twitterUrl" | "websiteUrl" | "jobTitle" | "education" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   articles?: boolean | Prisma.User$articlesArgs<ExtArgs>
   likedArticles?: boolean | Prisma.User$likedArticlesArgs<ExtArgs>
@@ -666,9 +972,18 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string
     username: string
     password: string
+    location: string | null
     bio: string | null
     avatarImage: string | null
+    skillsOrLanguages: string | null
+    availableFor: string | null
+    githubUrl: string | null
+    twitterUrl: string | null
+    websiteUrl: string | null
+    jobTitle: string | null
+    education: string | null
     createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1099,9 +1414,18 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
+  readonly location: Prisma.FieldRef<"User", 'String'>
   readonly bio: Prisma.FieldRef<"User", 'String'>
   readonly avatarImage: Prisma.FieldRef<"User", 'String'>
+  readonly skillsOrLanguages: Prisma.FieldRef<"User", 'String'>
+  readonly availableFor: Prisma.FieldRef<"User", 'String'>
+  readonly githubUrl: Prisma.FieldRef<"User", 'String'>
+  readonly twitterUrl: Prisma.FieldRef<"User", 'String'>
+  readonly websiteUrl: Prisma.FieldRef<"User", 'String'>
+  readonly jobTitle: Prisma.FieldRef<"User", 'String'>
+  readonly education: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     
 

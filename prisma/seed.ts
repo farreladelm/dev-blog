@@ -1,4 +1,4 @@
-import { ArticleStatus } from "@prisma/client";
+import { ArticleStatus } from "@/app/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { articlesData } from "./articles.data";
 import { calculateReadingTime } from "../src/lib/calculateReadingTime";
@@ -52,8 +52,8 @@ async function main() {
         where: { name },
         update: {},
         create: { name },
-      })
-    )
+      }),
+    ),
   );
 
   const tagMap = Object.fromEntries(tags.map((t) => [t.name, t]));

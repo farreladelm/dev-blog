@@ -1,11 +1,11 @@
-import { PublishedArticle } from "@/lib/types";
+import { ArticleWithUserAndTag } from "@/lib/types";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import ProfileAvatar from "../profile-avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import Tag from "./tag";
 
-export default function ArticleCard({ article }: { article: PublishedArticle }) {
+export default function ArticleCard({ article }: { article: ArticleWithUserAndTag }) {
     return (
         <Card className="gap-4">
             <CardHeader>

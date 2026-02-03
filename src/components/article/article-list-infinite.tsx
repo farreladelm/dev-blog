@@ -5,11 +5,10 @@ import { getPublishedArticlesPaginated } from '@/actions/article';
 import { toast } from 'sonner';
 import ArticleCard from './article-card';
 import { Loader2 } from 'lucide-react';
-import { Article } from '@/app/generated/prisma/client';
-import next from 'next';
+import { ArticleWithUserAndTag } from '@/lib/types';
 
 type ArticleListInfiniteProps = {
-    initialArticles: Article[];
+    initialArticles: ArticleWithUserAndTag[];
     initialHasMore: boolean;
 };
 
@@ -17,7 +16,7 @@ export default function ArticleListInfinite({
     initialArticles,
     initialHasMore
 }: ArticleListInfiniteProps) {
-    const [articles, setArticles] = useState<Article[]>(initialArticles);
+    const [articles, setArticles] = useState<ArticleWithUserAndTag[]>(initialArticles);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(initialHasMore);
     const observerTarget = useRef(null);

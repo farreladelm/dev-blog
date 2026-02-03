@@ -16,8 +16,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { getAvatarFallback, avatarVariants } from "@/lib/avatarFallback";
 import { LogoutDialog } from "./logout-dialog";
 import ProfileAvatar from "./profile-avatar";
 
@@ -65,8 +63,8 @@ const Header = async () => {
                             <DropdownMenuContent className="w-56" align="end" sideOffset={10}>
                                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                 <DropdownMenuGroup>
-                                    <DropdownMenuItem>
-                                        <Link href={`/profile/`} className="w-full hover:underline">Profile</Link>
+                                    <DropdownMenuItem asChild>
+                                        <Link href={`/${authUser.username}`} className="w-full hover:underline">Profile</Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
                                         <Link href={`/${authUser.username}/articles`} className="w-full hover:underline">My Article</Link>
