@@ -50,10 +50,12 @@ const Header = async () => {
                     </nav>
                 ) : (
                     <nav className="flex gap-4 items-center">
-                        <Button variant="outline" asChild>
+                        <Button variant="outline" className="hidden lg:flex" asChild>
                             <Link href="/articles/new">
                                 <IoAdd />
-                                New Article
+                                <span>
+                                    New Article
+                                </span>
                             </Link>
                         </Button>
                         <DropdownMenu>
@@ -65,6 +67,9 @@ const Header = async () => {
                                 <DropdownMenuGroup>
                                     <DropdownMenuItem>
                                         <Link href={`/profile/`} className="w-full hover:underline">Profile</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link href={`/${authUser.username}/articles`} className="w-full hover:underline">My Article</Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
                                         <Link href="/articles/new" className="w-full hover:underline">New Article</Link>

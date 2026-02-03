@@ -10,6 +10,7 @@
  */
 export type * from './models/User'
 export type * from './models/Article'
+export type * from './models/ArticleLike'
 export type * from './models/Tag'
 export type * from './models/ArticleTag'
 export type * from './commonInputTypes'

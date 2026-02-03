@@ -207,6 +207,7 @@ export type UserWhereInput = {
   avatarImage?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   articles?: Prisma.ArticleListRelationFilter
+  likedArticles?: Prisma.ArticleLikeListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -219,6 +220,7 @@ export type UserOrderByWithRelationInput = {
   avatarImage?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   articles?: Prisma.ArticleOrderByRelationAggregateInput
+  likedArticles?: Prisma.ArticleLikeOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -234,6 +236,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   avatarImage?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   articles?: Prisma.ArticleListRelationFilter
+  likedArticles?: Prisma.ArticleLikeListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -274,6 +277,7 @@ export type UserCreateInput = {
   avatarImage?: string | null
   createdAt?: Date | string
   articles?: Prisma.ArticleCreateNestedManyWithoutAuthorInput
+  likedArticles?: Prisma.ArticleLikeCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -286,6 +290,7 @@ export type UserUncheckedCreateInput = {
   avatarImage?: string | null
   createdAt?: Date | string
   articles?: Prisma.ArticleUncheckedCreateNestedManyWithoutAuthorInput
+  likedArticles?: Prisma.ArticleLikeUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -298,6 +303,7 @@ export type UserUpdateInput = {
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   articles?: Prisma.ArticleUpdateManyWithoutAuthorNestedInput
+  likedArticles?: Prisma.ArticleLikeUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -310,6 +316,7 @@ export type UserUncheckedUpdateInput = {
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   articles?: Prisma.ArticleUncheckedUpdateManyWithoutAuthorNestedInput
+  likedArticles?: Prisma.ArticleLikeUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -409,6 +416,20 @@ export type UserUpdateOneRequiredWithoutArticlesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutArticlesInput, Prisma.UserUpdateWithoutArticlesInput>, Prisma.UserUncheckedUpdateWithoutArticlesInput>
 }
 
+export type UserCreateNestedOneWithoutLikedArticlesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLikedArticlesInput, Prisma.UserUncheckedCreateWithoutLikedArticlesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLikedArticlesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutLikedArticlesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLikedArticlesInput, Prisma.UserUncheckedCreateWithoutLikedArticlesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLikedArticlesInput
+  upsert?: Prisma.UserUpsertWithoutLikedArticlesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLikedArticlesInput, Prisma.UserUpdateWithoutLikedArticlesInput>, Prisma.UserUncheckedUpdateWithoutLikedArticlesInput>
+}
+
 export type UserCreateWithoutArticlesInput = {
   id?: string
   email: string
@@ -418,6 +439,7 @@ export type UserCreateWithoutArticlesInput = {
   bio?: string | null
   avatarImage?: string | null
   createdAt?: Date | string
+  likedArticles?: Prisma.ArticleLikeCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutArticlesInput = {
@@ -429,6 +451,7 @@ export type UserUncheckedCreateWithoutArticlesInput = {
   bio?: string | null
   avatarImage?: string | null
   createdAt?: Date | string
+  likedArticles?: Prisma.ArticleLikeUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutArticlesInput = {
@@ -456,6 +479,7 @@ export type UserUpdateWithoutArticlesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likedArticles?: Prisma.ArticleLikeUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutArticlesInput = {
@@ -467,6 +491,71 @@ export type UserUncheckedUpdateWithoutArticlesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likedArticles?: Prisma.ArticleLikeUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutLikedArticlesInput = {
+  id?: string
+  email: string
+  name?: string
+  username: string
+  password: string
+  bio?: string | null
+  avatarImage?: string | null
+  createdAt?: Date | string
+  articles?: Prisma.ArticleCreateNestedManyWithoutAuthorInput
+}
+
+export type UserUncheckedCreateWithoutLikedArticlesInput = {
+  id?: string
+  email: string
+  name?: string
+  username: string
+  password: string
+  bio?: string | null
+  avatarImage?: string | null
+  createdAt?: Date | string
+  articles?: Prisma.ArticleUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type UserCreateOrConnectWithoutLikedArticlesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLikedArticlesInput, Prisma.UserUncheckedCreateWithoutLikedArticlesInput>
+}
+
+export type UserUpsertWithoutLikedArticlesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLikedArticlesInput, Prisma.UserUncheckedUpdateWithoutLikedArticlesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLikedArticlesInput, Prisma.UserUncheckedCreateWithoutLikedArticlesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLikedArticlesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLikedArticlesInput, Prisma.UserUncheckedUpdateWithoutLikedArticlesInput>
+}
+
+export type UserUpdateWithoutLikedArticlesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  articles?: Prisma.ArticleUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLikedArticlesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  articles?: Prisma.ArticleUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 
@@ -476,10 +565,12 @@ export type UserUncheckedUpdateWithoutArticlesInput = {
 
 export type UserCountOutputType = {
   articles: number
+  likedArticles: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   articles?: boolean | UserCountOutputTypeCountArticlesArgs
+  likedArticles?: boolean | UserCountOutputTypeCountLikedArticlesArgs
 }
 
 /**
@@ -499,6 +590,13 @@ export type UserCountOutputTypeCountArticlesArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.ArticleWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountLikedArticlesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ArticleLikeWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -510,6 +608,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   avatarImage?: boolean
   createdAt?: boolean
   articles?: boolean | Prisma.User$articlesArgs<ExtArgs>
+  likedArticles?: boolean | Prisma.User$likedArticlesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -549,6 +648,7 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "username" | "password" | "bio" | "avatarImage" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   articles?: boolean | Prisma.User$articlesArgs<ExtArgs>
+  likedArticles?: boolean | Prisma.User$likedArticlesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -558,6 +658,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     articles: Prisma.$ArticlePayload<ExtArgs>[]
+    likedArticles: Prisma.$ArticleLikePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -963,6 +1064,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   articles<T extends Prisma.User$articlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$articlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  likedArticles<T extends Prisma.User$likedArticlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$likedArticlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ArticleLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1409,6 +1511,30 @@ export type User$articlesArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.ArticleScalarFieldEnum | Prisma.ArticleScalarFieldEnum[]
+}
+
+/**
+ * User.likedArticles
+ */
+export type User$likedArticlesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ArticleLike
+   */
+  select?: Prisma.ArticleLikeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ArticleLike
+   */
+  omit?: Prisma.ArticleLikeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ArticleLikeInclude<ExtArgs> | null
+  where?: Prisma.ArticleLikeWhereInput
+  orderBy?: Prisma.ArticleLikeOrderByWithRelationInput | Prisma.ArticleLikeOrderByWithRelationInput[]
+  cursor?: Prisma.ArticleLikeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ArticleLikeScalarFieldEnum | Prisma.ArticleLikeScalarFieldEnum[]
 }
 
 /**

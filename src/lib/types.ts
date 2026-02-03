@@ -1,13 +1,16 @@
 import { Prisma } from "@/app/generated/prisma/client";
 
-export type ActionResult<T> = {
-  data?: T;
-  error?: string;
-};
-
-export type ActionState<TFields extends string> =
+export type ActionResult<TData = never> =
+  | (TData extends never ? { success: true } : { success: true; data: TData })
   | {
-      success?: boolean;
+      success: false;
+      error: string;
+    };
+
+export type ActionState<TFields extends string, TData = never> =
+  | (TData extends never ? { success: true } : { success: true; data: TData })
+  | {
+      success: false;
       fieldErrors?: Partial<Record<TFields, string>>;
       error?: string;
     }
@@ -18,9 +21,6 @@ export type RegisterActionState = ActionState<
 >;
 
 export type LoginActionState = ActionState<"email" | "password">;
-export type CreateArticleActionState = ActionState<
-  "title" | "body" | "tags" | "status"
->;
 
 export type ArticleDraft = {
   title: string;
@@ -28,7 +28,7 @@ export type ArticleDraft = {
   tags: string[];
 };
 
-export type PublishedArticle = Prisma.ArticleGetPayload<{
+export type ArticleWithUserAndTag = Prisma.ArticleGetPayload<{
   include: {
     author: {
       select: {
@@ -49,7 +49,7 @@ export type PublishedArticle = Prisma.ArticleGetPayload<{
   };
 }>;
 
-export type PublishedArticlesPaginated = {
-  articles: PublishedArticle[];
+export type ArticlesPaginated = {
+  articles: ArticleWithUserAndTag[];
   hasMore: boolean;
 };

@@ -5,18 +5,35 @@ import { verifyToken } from "@/lib/auth";
 const protectedRoutes = ["/articles/new"];
 const authRoutes = ["/login", "/register"];
 
+// Helper function to check if path matches protected route patterns
+function isProtectedPath(pathname: string): boolean {
+  // Check exact matches
+  if (protectedRoutes.some((route) => pathname.startsWith(route))) {
+    return true;
+  }
+
+  // Check dynamic patterns
+  const protectedPatterns = [
+    /^\/articles\/[^/]+\/edit$/, // /articles/{slug}/edit
+  ];
+
+  return protectedPatterns.some((pattern) => pattern.test(pathname));
+}
+
 export async function proxy(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
   const session = token ? await verifyToken(token) : null;
 
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route)
-  );
-  const isAuthRoute = authRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route)
-  );
+  const pathname = request.nextUrl.pathname;
 
-  if (isProtectedRoute && !session) {
+  const isProtected = isProtectedPath(pathname);
+  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL("/articles", request.url));
+  }
+
+  if (isProtected && !session) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

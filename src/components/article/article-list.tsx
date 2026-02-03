@@ -7,12 +7,12 @@ import ArticleListInfinite from "./article-list-infinite";
 export default async function ArticleList() {
     const result = await getPublishedArticlesPaginated(1, 8);
 
-    if (!result.data) {
+    if (!result.success) {
         toast.error(result.error);
         return <div>Error loading articles.</div>;
     }
 
-    const { articles, hasMore } = result.data;
+    const { articles, hasMore } = result.data!;
 
     return (
         <ArticleListInfinite

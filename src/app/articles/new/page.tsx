@@ -33,13 +33,21 @@ export default function NewArticlePage() {
 
     console.log("Create Article Action Data:", data);
 
-    if (data?.success) {
+    if (data.success) {
       localStorage.removeItem(DRAFT_KEY);
 
-      router.push("/articles");
-    } else if (!data?.success) {
-      if (data?.error) toast.error(data.error);
-      if (data?.fieldErrors) {
+      const { article, authorUsername } = data.data;
+
+      if (article.status === STATUS.DRAFT) {
+        router.push(`/${authorUsername}/articles`);
+
+      } else {
+        router.push(`/articles/${article.id}`);
+      }
+
+    } else {
+      if (data.error) toast.error(data.error);
+      if (data.fieldErrors) {
         Object.values(data.fieldErrors).forEach(error => {
           if (error) toast.error(error);
         });

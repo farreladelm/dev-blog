@@ -28,6 +28,11 @@ export type User = Prisma.UserModel
  */
 export type Article = Prisma.ArticleModel
 /**
+ * Model ArticleLike
+ * 
+ */
+export type ArticleLike = Prisma.ArticleLikeModel
+/**
  * Model Tag
  * 
  */

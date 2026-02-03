@@ -1,22 +1,21 @@
-import { getArticleBySlug } from "@/actions/article";
-import { toast } from "sonner";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import Link from "next/link";
 import ProfileAvatar from "../profile-avatar";
-import { notFound } from "next/navigation";
-import { PiThumbsUp } from "react-icons/pi";
 import MarkdownRenderer from "../markdown-renderer";
 import Tag from "./tag";
+import LikeButton from "./like-button";
+import { ArticleWithUserAndTag } from "@/lib/types";
 
-export default async function ArticleDetail({ slug }: { slug: string }) {
-    const result = await getArticleBySlug(slug);
+type ArticleDetailProps = {
+    article: ArticleWithUserAndTag,
+    userId: string | undefined,
+    isLikedByCurrentUser: boolean
+}
 
-
-    const article = result.data;
-
-    if (!article) {
-        notFound();
-    }
+export default async function ArticleDetail({ article, userId, isLikedByCurrentUser }: ArticleDetailProps) {
+    console.log(userId);
+    const isAuthor = userId && userId === article.authorId;
+    console.log(isAuthor);
     return (
         <article className="flex justify-center w-full gap-4 lg:px-20">
 
@@ -37,10 +36,9 @@ export default async function ArticleDetail({ slug }: { slug: string }) {
                         </h1>
                     </CardTitle>
 
-                    <CardAction>
-                        <div className="p-1 rounded hover:bg-accent cursor-pointer">
-                            <PiThumbsUp className="size-6" />
-                        </div>
+                    <CardAction className="flex flex-row gap-2 items-center">
+                        {isAuthor ? <Link href={`/articles/${article.slug}/edit`} className="text-muted-foreground hover:underline hover:text-foreground ml-auto">Edit</Link> : ""}
+                        <LikeButton articleId={article.id} initialLikes={article.likes} initialIsLiked={isLikedByCurrentUser} />
                     </CardAction>
 
                     <CardDescription className="mt-6">

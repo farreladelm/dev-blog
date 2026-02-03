@@ -2,7 +2,7 @@
 
 import { Loader2 } from "lucide-react";
 import { useFormStatus } from "react-dom";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { STATUS } from "@/constants/article";
 
 export default function ArticleSubmitButtons() {
