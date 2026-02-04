@@ -1,6 +1,7 @@
 import { getUserDetail } from "@/actions/profile";
 import { getSession } from "@/lib/auth"
 import { notFound, unauthorized } from "next/navigation";
+import UpdateProfileForm from "./update-profile-form";
 
 export default async function Page() {
     const session = await getSession();
@@ -18,6 +19,6 @@ export default async function Page() {
     const user = getUserDetailResult.data;
 
     return (
-        <div>Hi {user.name}</div>
+        <UpdateProfileForm user={user} />
     )
 }

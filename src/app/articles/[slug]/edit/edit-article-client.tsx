@@ -40,12 +40,12 @@ export default function EditArticleClient({ article }: EditArticleClientProps) {
 
         console.log("Update Article Action Data:", data);
 
-        if (data?.success) {
+        if (data.success) {
             toast.success("Article updated successfully!");
             router.push(`/articles/${article.slug}`);
-        } else if (!data?.success) {
-            if (data?.error) toast.error(data.error);
-            if (data?.fieldErrors) {
+        } else if (!data.success) {
+            if (data.error) toast.error(data.error);
+            if (data.fieldErrors) {
                 Object.values(data.fieldErrors).forEach((error) => {
                     if (error) toast.error(error);
                 });

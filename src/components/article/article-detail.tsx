@@ -23,7 +23,7 @@ export default async function ArticleDetail({ article, userId, isLikedByCurrentU
                 <CardHeader>
                     <Link href={`/profile/${article.author.username}`} className="w-fit group">
                         <div className="py-2 flex items-center gap-3 w-fit">
-                            <ProfileAvatar username={article.author.username} />
+                            <ProfileAvatar username={article.author.username} imageUrl={article.author.avatarImage} />
                             <div className="flex flex-col">
                                 <span className="font-medium group-hover:underline">{article.author.name}</span>
                                 <span className="text-xs text-muted-foreground">{article.author.username}</span>

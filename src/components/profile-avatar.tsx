@@ -16,6 +16,7 @@ export default function ProfileAvatar({ username, imageUrl, classname = "" }: Pr
                 <AvatarImage
                     src={imageUrl}
                     alt={`@${username}`}
+                    className="object-cover"
                 />
             }
 

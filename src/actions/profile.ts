@@ -6,19 +6,69 @@ import { getSession, createToken, setAuthCookie } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { ActionResult, ActionState } from "@/lib/types";
 import { User } from "@/app/generated/prisma/client";
+import { uploadAvatar, deleteAvatar } from "@/lib/upload-utils";
 
 const updateProfileSchema = z.object({
-  name: z.string().trim().min(2).max(50),
-  email: z.email(),
-  bio: z.string().trim().max(160).optional(),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must be at most 50 characters"),
+  email: z.email("Invalid email address"),
+  username: z
+    .string()
+    .trim()
+    .min(3, "Username must be at least 3 characters")
+    .max(30, "Username must be at most 30 characters"),
+  bio: z
+    .string()
+    .trim()
+    .max(160, "Bio must be at most 160 characters")
+    .optional(),
+  websiteUrl: z.url("Invalid URL").optional().or(z.literal("")),
+  location: z
+    .string()
+    .trim()
+    .max(100, "Location must be at most 100 characters")
+    .optional(),
+  jobTitle: z
+    .string()
+    .trim()
+    .max(100, "Job title must be at most 100 characters")
+    .optional(),
+  education: z
+    .string()
+    .trim()
+    .max(200, "Education must be at most 200 characters")
+    .optional(),
+  skillsOrLanguages: z
+    .string()
+    .trim()
+    .max(500, "Skills must be at most 500 characters")
+    .optional(),
+  availableFor: z
+    .string()
+    .trim()
+    .max(200, "Available for must be at most 200 characters")
+    .optional(),
 });
 
 export type UpdateProfileActionState = ActionState<
-  "name" | "email" | "bio",
+  | "name"
+  | "email"
+  | "username"
+  | "avatarImage"
+  | "websiteUrl"
+  | "location"
+  | "bio"
+  | "jobTitle"
+  | "education"
+  | "skillsOrLanguages"
+  | "availableFor",
   { message: string }
 >;
 
-export async function updateProfileAction(
+export async function updateProfile(
   username: string,
   _: UpdateProfileActionState,
   formData: FormData,
@@ -33,36 +83,76 @@ export async function updateProfileAction(
     const parsed = updateProfileSchema.safeParse({
       name: formData.get("name"),
       email: formData.get("email"),
-      bio: formData.get("bio") || "",
+      username: formData.get("username"),
+      bio: formData.get("bio") || undefined,
+      websiteUrl: formData.get("websiteUrl") || undefined,
+      location: formData.get("location") || undefined,
+      jobTitle: formData.get("jobTitle") || undefined,
+      education: formData.get("education") || undefined,
+      skillsOrLanguages: formData.get("skillsOrLanguages") || undefined,
+      availableFor: formData.get("availableFor") || undefined,
     });
 
     if (!parsed.success) {
-      const fieldErrors = z.flattenError(parsed.error).fieldErrors;
+      const fieldErrors = parsed.error.flatten().fieldErrors;
+
       return {
         success: false,
         fieldErrors: {
           name: fieldErrors.name?.[0],
           email: fieldErrors.email?.[0],
+          username: fieldErrors.username?.[0],
           bio: fieldErrors.bio?.[0],
+          websiteUrl: fieldErrors.websiteUrl?.[0],
+          location: fieldErrors.location?.[0],
+          jobTitle: fieldErrors.jobTitle?.[0],
+          education: fieldErrors.education?.[0],
+          skillsOrLanguages: fieldErrors.skillsOrLanguages?.[0],
+          availableFor: fieldErrors.availableFor?.[0],
         },
       };
     }
 
-    const { name, email, bio } = parsed.data;
+    const {
+      name,
+      email,
+      username: newUsername,
+      bio,
+      websiteUrl,
+      location,
+      jobTitle,
+      education,
+      skillsOrLanguages,
+      availableFor,
+    } = parsed.data;
 
-    const existingEmail = await prisma.user.findFirst({
-      where: {
-        email,
-        NOT: { id: session.userId },
-      },
-      select: { id: true },
-    });
+    // Handle avatar image upload
+    let avatarImagePath: string | null = null;
+    const avatarFile = formData.get("avatarImage") as File | null;
 
-    if (existingEmail) {
-      return {
-        success: false,
-        fieldErrors: { email: "Email is already in use" },
-      };
+    if (avatarFile && avatarFile.size > 0) {
+      const uploadResult = await uploadAvatar(avatarFile, session.userId);
+
+      if (!uploadResult.success) {
+        return {
+          success: false,
+          fieldErrors: {
+            avatarImage: uploadResult.error,
+          },
+        };
+      }
+
+      avatarImagePath = uploadResult.path;
+
+      // Delete old avatar if exists
+      const currentUser = await prisma.user.findUnique({
+        where: { id: session.userId },
+        select: { avatarImage: true },
+      });
+
+      if (currentUser?.avatarImage) {
+        await deleteAvatar(currentUser.avatarImage);
+      }
     }
 
     const updatedUser = await prisma.user.update({
@@ -70,21 +160,44 @@ export async function updateProfileAction(
       data: {
         name,
         email,
+        username: newUsername,
         bio: bio && bio.length > 0 ? bio : null,
+        websiteUrl: websiteUrl && websiteUrl.length > 0 ? websiteUrl : null,
+        location: location && location.length > 0 ? location : null,
+        jobTitle: jobTitle && jobTitle.length > 0 ? jobTitle : null,
+        education: education && education.length > 0 ? education : null,
+        skillsOrLanguages:
+          skillsOrLanguages && skillsOrLanguages.length > 0
+            ? skillsOrLanguages
+            : null,
+        availableFor:
+          availableFor && availableFor.length > 0 ? availableFor : null,
+        ...(avatarImagePath && { avatarImage: avatarImagePath }),
       },
     });
 
-    if (updatedUser.name !== session.name) {
+    if (
+      updatedUser.name !== session.name ||
+      updatedUser.username !== session.username ||
+      updatedUser.avatarImage !== session.avatarImage
+    ) {
       const token = await createToken(updatedUser);
       await setAuthCookie(token);
     }
 
-    revalidatePath(`/${username}`);
+    revalidatePath(`/${newUsername}`);
+    revalidatePath("/profile/edit");
 
-    return { success: true, data: { message: "Successfully update profile" } };
+    return {
+      success: true,
+      data: { message: "Successfully updated profile" },
+    };
   } catch (error) {
     console.error("Error when updating profile:", error);
-    return { success: false, error: error as string };
+    return {
+      success: false,
+      error: "An unexpected error occurred while updating your profile",
+    };
   }
 }
 

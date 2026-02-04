@@ -21,14 +21,11 @@ export function ProfileCard({ user, isAuthor }: ProfileCardProps) {
     return (
         <Card className="mx-auto w-full max-w-4xl pt-0 mt-24">
             <div className="relative h-24">
-                {/* <img
-                    src="/profile"
-                    alt="profile picture"
-                    className="z-20 aspect-square size-32 lg:size-40 object-cover mx-auto -translate-y-1/2 rounded-full"
-                /> */}
                 <ProfileAvatar username={user.username} imageUrl={user.avatarImage} classname="z-20 aspect-square size-32 lg:size-40 object-cover mx-auto -translate-y-1/2 rounded-full text-5xl" />
                 {isAuthor &&
-                    <Button variant="outline" className="absolute top-4 right-4">Edit</Button>
+                    <Button variant="outline" className="absolute top-4 right-4" asChild>
+                        <Link href="/profile/edit">Edit</Link>
+                    </Button>
                 }
             </div>
             <CardHeader>
