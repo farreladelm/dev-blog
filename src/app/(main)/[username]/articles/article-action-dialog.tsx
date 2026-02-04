@@ -12,14 +12,14 @@ import {
 import { useActionState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { publishArticle, unpublishArticle, deleteArticle } from "@/actions/article";
+import { toggleArticleStatus, deleteArticle } from "@/actions/article";
 import { toast } from "sonner";
 
 type DialogType = 'publish' | 'unpublish' | 'delete';
 
 interface ArticleActionDialogProps {
     type: DialogType;
-    articleId: string;
+    articleSlug: string;
     articleTitle: string;
     open: boolean;
     onOpenChange: (open: boolean) => void;
@@ -29,7 +29,7 @@ const dialogConfig = {
     publish: {
         title: (title: string) => `Publish article "${title}"?`,
         description: "This will make your article visible to everyone.",
-        action: publishArticle,
+        action: toggleArticleStatus,
         buttonText: "Publish",
         buttonVariant: "default" as const,
         loadingText: "Publishing..."
@@ -37,7 +37,7 @@ const dialogConfig = {
     unpublish: {
         title: (title: string) => `Unpublish article "${title}"?`,
         description: "This will hide your article from public view. You can publish it again later.",
-        action: unpublishArticle,
+        action: toggleArticleStatus,
         buttonText: "Unpublish",
         buttonVariant: "secondary" as const,
         loadingText: "Unpublishing..."
@@ -54,7 +54,7 @@ const dialogConfig = {
 
 export const ArticleActionDialog = ({
     type,
-    articleId,
+    articleSlug,
     articleTitle,
     open,
     onOpenChange
@@ -62,7 +62,7 @@ export const ArticleActionDialog = ({
     const config = dialogConfig[type];
 
     const [data, action, isPending] = useActionState(
-        config.action.bind(null, articleId),
+        config.action.bind(null, articleSlug),
         undefined
     );
 

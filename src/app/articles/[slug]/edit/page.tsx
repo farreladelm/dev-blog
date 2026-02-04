@@ -1,4 +1,4 @@
-import { getAuthorArticle } from "@/actions/article";
+import { getArticleForEditing } from "@/actions/article";
 import { getSession } from "@/lib/auth";
 import { notFound, redirect } from "next/navigation";
 import EditArticleClient from "./edit-article-client";
@@ -10,7 +10,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
     const { slug } = await params;
 
-    const result = await getAuthorArticle(slug);
+    const result = await getArticleForEditing(slug);
 
     if (!result.success) {
         notFound();

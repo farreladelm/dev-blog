@@ -47,7 +47,7 @@ export function ArticleList({ articles, userId }: ArticleListClientProps) {
             {dialog.article && dialog.type && (
                 <ArticleActionDialog
                     type={dialog.type}
-                    articleId={dialog.article.id}
+                    articleSlug={dialog.article.slug}
                     articleTitle={dialog.article.title}
                     open={dialog.open}
                     onOpenChange={(open: boolean) => {

@@ -29,7 +29,7 @@ const loginSchema = z.object({
 
 export async function registerAction(
   _: RegisterActionState,
-  formData: FormData
+  formData: FormData,
 ): Promise<RegisterActionState> {
   try {
     const parsed = registerSchema.safeParse({
@@ -41,6 +41,7 @@ export async function registerAction(
     if (!parsed.success) {
       const fieldErrors = z.flattenError(parsed.error).fieldErrors;
       return {
+        success: false,
         fieldErrors: {
           email: fieldErrors.email?.[0],
           username: fieldErrors.username?.[0],
@@ -58,7 +59,7 @@ export async function registerAction(
     });
 
     if (existingUser) {
-      return { error: "Email or username already exists" };
+      return { success: false, error: "Email or username already exists" };
     }
 
     const hashedPassword = await hashPassword(data.password);
@@ -76,9 +77,9 @@ export async function registerAction(
   } catch (error) {
     console.log(error);
     if (error instanceof z.ZodError) {
-      return { error: error.message };
+      return { success: false, error: error.message };
     }
-    return { error: "Registration failed" };
+    return { success: false, error: "Registration failed" };
   }
 
   redirect("/articles");
@@ -86,7 +87,7 @@ export async function registerAction(
 
 export async function loginAction(
   _: LoginActionState,
-  formData: FormData
+  formData: FormData,
 ): Promise<LoginActionState> {
   try {
     const parsed = loginSchema.safeParse({
@@ -97,6 +98,7 @@ export async function loginAction(
     if (!parsed.success) {
       const fieldErrors = z.flattenError(parsed.error).fieldErrors;
       return {
+        success: false,
         fieldErrors: {
           email: fieldErrors.email?.[0],
           password: fieldErrors.password?.[0],
@@ -111,7 +113,7 @@ export async function loginAction(
     });
 
     if (!user || !(await verifyPassword(data.password, user.password))) {
-      return { error: "Invalid email or password" };
+      return { success: false, error: "Invalid email or password" };
     }
 
     const token = await createToken(user.id, user.name, user.username);
@@ -120,9 +122,9 @@ export async function loginAction(
     console.log(error);
 
     if (error instanceof z.ZodError) {
-      return { error: error.message };
+      return { success: false, error: error.message };
     }
-    return { error: "Login failed" };
+    return { success: false, error: "Login failed" };
   }
 
   redirect("/articles");

@@ -8,7 +8,7 @@ import ArticleDraftEditor from "@/components/article/article-draft-editor";
 import MarkdownPreview from "@/components/article/markdown-preview";
 import { ArticleDraft } from "@/lib/types";
 import { DEBOUNCE_DELAY, DRAFT_KEY, STATUS } from "@/constants/article";
-import { createArticle } from "@/actions/article";
+import { submitArticleForm } from "@/actions/article";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ArticleSubmitButtons from "@/components/article/article-submit-buttons";
@@ -24,7 +24,7 @@ export default function NewArticlePage() {
     tags: [],
   });
 
-  const createActionWithDraft = createArticle.bind(null, draft);
+  const createActionWithDraft = submitArticleForm.bind(null, draft);
 
   const [data, action, isPending] = useActionState(createActionWithDraft, undefined);
 

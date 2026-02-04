@@ -7,7 +7,7 @@ import { useActionState, useEffect, useState } from "react";
 import ArticleDraftEditor from "@/components/article/article-draft-editor";
 import MarkdownPreview from "@/components/article/markdown-preview";
 import { ArticleDraft, ArticleWithUserAndTag } from "@/lib/types";
-import { updateArticle } from "@/actions/article";
+import { submitArticleUpdateForm } from "@/actions/article";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import ArticleSubmitButtons from "@/components/article/article-submit-buttons";
@@ -26,7 +26,7 @@ export default function EditArticleClient({ article }: EditArticleClientProps) {
         tags: article.tags.map((t) => t.tag.name),
     });
 
-    const updateArticleWithBoundData = updateArticle
+    const updateArticleWithBoundData = submitArticleUpdateForm
         .bind(null, article.id)
         .bind(null, draft);
 

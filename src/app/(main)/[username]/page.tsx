@@ -6,10 +6,11 @@ import { getSession } from "@/lib/auth";
 import ArticleCard from "@/components/article/article-card";
 import { getUserDetail } from "@/actions/profile";
 import { IoDocument } from "react-icons/io5";
+import { STATUS } from "@/constants/article";
 
 export default async function Page({ params }: { params: Promise<{ username: string }> }) {
     const { username } = await params;
-    const articlesResult = await getArticlesByAuthor(username)
+    const articlesResult = await getArticlesByAuthor(username);
     const session = await getSession();
     const userResult = await getUserDetail(username);
 
@@ -20,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
     const articles = articlesResult.data;
     const user = userResult.data;
     const isAuthor = session ? session.userId === user.id : false;
-    const publishedCount = articles ? articles.filter(article => article.status === 'PUBLISHED').length : 0;
+    const publishedCount = articles ? articles.filter(article => article.status === STATUS.PUBLISHED).length : 0;
     return (
         <div className="flex flex-col items-center justify-center p-4 lg:p-0 gap-4">
             <ProfileCard user={user} isAuthor={isAuthor} />

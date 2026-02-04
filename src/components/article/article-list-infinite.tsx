@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react';
-import { getPublishedArticlesPaginated } from '@/actions/article';
+import { getPublishedArticles } from '@/actions/article';
 import { toast } from 'sonner';
 import ArticleCard from './article-card';
 import { Loader2 } from 'lucide-react';
@@ -52,7 +52,7 @@ export default function ArticleListInfinite({
 
         const nextPage = pageRef.current + 1;
 
-        const result = await getPublishedArticlesPaginated(nextPage);
+        const result = await getPublishedArticles(nextPage);
 
         if (!result.success) {
             toast.error(result.error || 'Failed to load more articles');

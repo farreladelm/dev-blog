@@ -1,11 +1,11 @@
 // components/ArticleList.tsx
-import { getPublishedArticlesPaginated } from "@/actions/article"
+import { getPublishedArticles } from "@/actions/article"
 import { toast } from "sonner";
 import ArticleListInfinite from "./article-list-infinite";
 
 
 export default async function ArticleList() {
-    const result = await getPublishedArticlesPaginated(1, 8);
+    const result = await getPublishedArticles(1, 8);
 
     if (!result.success) {
         toast.error(result.error);
