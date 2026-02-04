@@ -72,7 +72,7 @@ export async function registerAction(
       },
     });
 
-    const token = await createToken(user.id, user.username, user.username);
+    const token = await createToken(user);
     await setAuthCookie(token);
   } catch (error) {
     console.log(error);
@@ -116,7 +116,7 @@ export async function loginAction(
       return { success: false, error: "Invalid email or password" };
     }
 
-    const token = await createToken(user.id, user.name, user.username);
+    const token = await createToken(user);
     await setAuthCookie(token);
   } catch (error) {
     console.log(error);

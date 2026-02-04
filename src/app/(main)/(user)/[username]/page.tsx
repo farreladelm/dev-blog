@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ username: str
     return (
         <div className="flex flex-col items-center justify-center p-4 lg:p-0 gap-4">
             <ProfileCard user={user} isAuthor={isAuthor} />
-            <div className="grid grid-cols-[280px_1fr] w-full max-w-4xl gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] w-full max-w-4xl gap-4">
                 <div className="space-y-4">
                     {user.skillsOrLanguages &&
                         <Card className="w-full">
@@ -65,8 +65,11 @@ export default async function Page({ params }: { params: Promise<{ username: str
 
                 </div>
 
-                <div className="w-full flex flex-col gap-2">
-                    {articles && articles.map(article => <ArticleCard article={article} key={article.id}></ArticleCard>)}
+                <div className="flex flex-col gap-4 mt-10 lg:mt-0">
+                    <h1 className="font-bold lg:hidden">Articles</h1>
+                    <div className="w-full flex flex-col gap-2">
+                        {articles ? articles.map(article => <ArticleCard article={article} key={article.id}></ArticleCard>) : <p>No published article</p>}
+                    </div>
                 </div>
             </div>
         </div>

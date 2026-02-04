@@ -15,6 +15,7 @@ function isProtectedPath(pathname: string): boolean {
   // Check dynamic patterns
   const protectedPatterns = [
     /^\/articles\/[^/]+\/edit$/, // /articles/{slug}/edit
+    /^\/[^/]+\/articles$/, // /{username}/articles
   ];
 
   return protectedPatterns.some((pattern) => pattern.test(pathname));
@@ -29,9 +30,9 @@ export async function proxy(request: NextRequest) {
   const isProtected = isProtectedPath(pathname);
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
 
-  if (pathname === "/") {
-    return NextResponse.redirect(new URL("/articles", request.url));
-  }
+  // if (pathname === "/") {
+  //   return NextResponse.redirect(new URL("/articles", request.url));
+  // }
 
   if (isProtected && !session) {
     return NextResponse.redirect(new URL("/login", request.url));

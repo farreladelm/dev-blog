@@ -75,11 +75,7 @@ export async function updateProfileAction(
     });
 
     if (updatedUser.name !== session.name) {
-      const token = await createToken(
-        updatedUser.id,
-        updatedUser.name,
-        updatedUser.username,
-      );
+      const token = await createToken(updatedUser);
       await setAuthCookie(token);
     }
 

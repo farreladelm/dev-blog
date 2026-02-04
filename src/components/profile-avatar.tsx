@@ -1,11 +1,24 @@
 import { avatarVariants, getAvatarFallback } from "@/lib/avatarFallback";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-export default function ProfileAvatar({ username }: { username: string }) {
+type ProfileAvatarProps = {
+    username: string;
+    imageUrl: string | null;
+    classname?: string
+}
+
+export default function ProfileAvatar({ username, imageUrl, classname = "" }: ProfileAvatarProps) {
     const { initials, colorIndex } = getAvatarFallback(username);
 
     return (
-        <Avatar>
+        <Avatar className={classname}>
+            {imageUrl &&
+                <AvatarImage
+                    src={imageUrl}
+                    alt={`@${username}`}
+                />
+            }
+
             <AvatarFallback className={avatarVariants[colorIndex]}>{initials}</AvatarFallback>
         </Avatar>
     )
