@@ -23,7 +23,7 @@ const updateProfileSchema = z.object({
   bio: z
     .string()
     .trim()
-    .max(160, "Bio must be at most 160 characters")
+    .max(200, "Bio must be at most 200 characters")
     .optional(),
   websiteUrl: z.url("Invalid URL").optional().or(z.literal("")),
   location: z
@@ -39,12 +39,12 @@ const updateProfileSchema = z.object({
   education: z
     .string()
     .trim()
-    .max(200, "Education must be at most 200 characters")
+    .max(100, "Education must be at most 100 characters")
     .optional(),
   skillsOrLanguages: z
     .string()
     .trim()
-    .max(500, "Skills must be at most 500 characters")
+    .max(200, "Skills or languages must be at most 200 characters")
     .optional(),
   availableFor: z
     .string()
@@ -80,7 +80,7 @@ export async function updateProfile(
   }
 
   try {
-    const parsed = updateProfileSchema.safeParse({
+    const rawData = {
       name: formData.get("name"),
       email: formData.get("email"),
       username: formData.get("username"),
@@ -91,25 +91,22 @@ export async function updateProfile(
       education: formData.get("education") || undefined,
       skillsOrLanguages: formData.get("skillsOrLanguages") || undefined,
       availableFor: formData.get("availableFor") || undefined,
-    });
+    };
+
+    const parsed = updateProfileSchema.safeParse(rawData);
 
     if (!parsed.success) {
-      const fieldErrors = parsed.error.flatten().fieldErrors;
+      const fieldErrors = Object.fromEntries(
+        Object.entries(z.flattenError(parsed.error).fieldErrors).map(
+          ([key, value]) => [key, value?.[0]],
+        ),
+      );
 
       return {
         success: false,
-        fieldErrors: {
-          name: fieldErrors.name?.[0],
-          email: fieldErrors.email?.[0],
-          username: fieldErrors.username?.[0],
-          bio: fieldErrors.bio?.[0],
-          websiteUrl: fieldErrors.websiteUrl?.[0],
-          location: fieldErrors.location?.[0],
-          jobTitle: fieldErrors.jobTitle?.[0],
-          education: fieldErrors.education?.[0],
-          skillsOrLanguages: fieldErrors.skillsOrLanguages?.[0],
-          availableFor: fieldErrors.availableFor?.[0],
-        },
+        error: "Failed updating profile due to validation errors",
+        fieldErrors,
+        submittedData: rawData,
       };
     }
 

@@ -61,9 +61,10 @@ const Header = async () => {
                                 <ProfileAvatar username={authUser.username} imageUrl={authUser.avatarImage} />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="end" sideOffset={10}>
-                                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                <DropdownMenuLabel className="overflow-hidden text-ellipsis">{authUser.name}</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
                                 <DropdownMenuGroup>
-                                    <DropdownMenuItem asChild>
+                                    <DropdownMenuItem>
                                         <Link href={`/${authUser.username}`} className="w-full hover:underline">Profile</Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
@@ -72,11 +73,12 @@ const Header = async () => {
                                     <DropdownMenuItem>
                                         <Link href="/articles/new" className="w-full hover:underline">New Article</Link>
                                     </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link href="/profile/edit" className="w-full hover:underline">Edit Profile</Link>
+                                    </DropdownMenuItem>
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
-                                    <LogoutDialog />
-                                </DropdownMenuItem>
+                                <LogoutDialog />
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </nav>

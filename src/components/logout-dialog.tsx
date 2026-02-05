@@ -13,14 +13,19 @@ import {
 import { useActionState } from "react";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
+import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 
 export const LogoutDialog = () => {
     const [data, action, isPending] = useActionState(logoutAction, undefined);
 
     return (
         <Dialog>
-            <DialogTrigger className="w-full hover:underline hover:bg-accent rounded-sm text-sm text-left px-2 py-1.5 cursor-pointer">
-                Logout
+            <DialogTrigger className="w-full hover:underline hover:bg-accent rounded-sm text-sm text-left px-2 py-1.5 cursor-pointer" asChild>
+                <DropdownMenuItem
+                    onSelect={(e) => e.preventDefault()}
+                >
+                    Logout
+                </DropdownMenuItem>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>

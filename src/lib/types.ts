@@ -13,6 +13,7 @@ export type ActionState<TFields extends string, TData = never> =
       success: false;
       fieldErrors?: Partial<Record<TFields, string>>;
       error?: string;
+      submittedData?: Record<string, any>;
     }
   | undefined;
 
