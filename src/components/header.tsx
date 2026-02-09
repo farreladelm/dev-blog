@@ -23,10 +23,10 @@ const Header = async () => {
     const authUser = await getSession();
 
     return (
-        <header className="border-b border-border bg-card">
+        <header className="border-b border-border bg-card sticky top-0 z-50 w-full">
             <div className="container mx-auto flex h-16 items-center justify-between gap-2 px-4 3xl:px-4 lg:px-20">
                 <div className="flex gap-4 items-center">
-                    <Link href="/articles" className="text-3xl">
+                    <Link href="/" className="text-3xl">
                         <FaLaptopCode />
                     </Link>
                     <SearchBar />

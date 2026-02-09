@@ -4,7 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession, createToken, setAuthCookie } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
-import { ActionResult, ActionState } from "@/lib/types";
+import { ActionResult, ActionState, UserProfile } from "@/lib/types";
 import { User } from "@/app/generated/prisma/client";
 import { uploadAvatar, deleteAvatar } from "@/lib/upload-utils";
 
@@ -214,5 +214,39 @@ export async function getUserDetail(
   } catch (error) {
     console.error("Error getting user detail:", error);
     return { success: false, error: "Error getting user detail" };
+  }
+}
+
+export async function searchUsers(query: string): Promise<
+  ActionResult<{
+    users: UserProfile[];
+  }>
+> {
+  try {
+    if (!query.trim()) return { success: true, data: { users: [] } };
+
+    const users = await prisma.user.findMany({
+      where: {
+        OR: [
+          { name: { contains: query, mode: "insensitive" } },
+          { username: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        avatarImage: true,
+        bio: true,
+      },
+      orderBy: {
+        name: "asc",
+      },
+    });
+
+    return { success: true, data: { users } };
+  } catch (error) {
+    console.error("Error searching users:", error);
+    return { success: false, error: "Failed to search users" };
   }
 }

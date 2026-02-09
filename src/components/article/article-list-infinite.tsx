@@ -75,7 +75,7 @@ export default function ArticleListInfinite({
 
     return (
         <div>
-            <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-2">
+            <div className="w-full grid grid-cols-1 gap-2">
                 {articles.map((article) => (
                     <ArticleCard article={article} key={article.id} />
                 ))}

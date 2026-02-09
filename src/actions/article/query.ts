@@ -185,3 +185,63 @@ export async function getArticlesByAuthor(username: string) {
     return { success: false, error: "Failed to get user articles" };
   }
 }
+
+export async function searchArticles(
+  query: string,
+  page: number = 1,
+  limit: number = 8,
+): Promise<
+  ActionResult<{ articles: ArticleWithUserAndTag[]; hasMore: boolean }>
+> {
+  try {
+    const skip = (page - 1) * limit;
+
+    const articles = await prisma.article.findMany({
+      where: {
+        status: STATUS.PUBLISHED,
+        OR: [
+          { title: { contains: query, mode: "insensitive" } },
+          { body: { contains: query, mode: "insensitive" } },
+          { slug: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      orderBy: { publishedAt: "desc" },
+      skip,
+      take: limit + 1,
+      include: {
+        author: {
+          select: {
+            username: true,
+            name: true,
+            avatarImage: true,
+          },
+        },
+        tags: {
+          select: {
+            tag: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const hasMore = articles.length > limit;
+    const articlesData = hasMore ? articles.slice(0, limit) : articles;
+
+    return {
+      success: true,
+      data: {
+        articles: articlesData,
+        hasMore,
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: "Failed to search articles",
+    };
+  }
+}

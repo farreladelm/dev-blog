@@ -1,4 +1,4 @@
-import { Prisma } from "@/app/generated/prisma/client";
+import { Prisma, User } from "@/app/generated/prisma/client";
 
 export type ActionResult<TData = never> =
   | (TData extends never ? { success: true } : { success: true; data: TData })
@@ -54,3 +54,8 @@ export type ArticlesPaginated = {
   articles: ArticleWithUserAndTag[];
   hasMore: boolean;
 };
+
+export type UserProfile = Pick<
+  User,
+  "id" | "name" | "username" | "avatarImage" | "bio"
+>;

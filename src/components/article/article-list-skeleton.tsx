@@ -3,7 +3,7 @@ import { Card } from "../ui/card"
 
 export default function ArticleListSkeleton() {
     return (
-        <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-2">
+        <div className="w-full grid grid-cols-1 gap-2">
             <ArticleCardSkeleton />
             <ArticleCardSkeleton />
             <ArticleCardSkeleton />
