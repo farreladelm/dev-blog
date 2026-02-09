@@ -82,7 +82,7 @@ export async function registerAction(
     return { success: false, error: "Registration failed" };
   }
 
-  redirect("/articles");
+  redirect("/");
 }
 
 export async function loginAction(
@@ -127,7 +127,7 @@ export async function loginAction(
     return { success: false, error: "Login failed" };
   }
 
-  redirect("/articles");
+  redirect("/");
 }
 
 export async function logoutAction(_: unknown, __: FormData) {

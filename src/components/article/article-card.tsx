@@ -9,7 +9,7 @@ export default function ArticleCard({ article }: { article: ArticleWithUserAndTa
     return (
         <Card className="gap-4">
             <CardHeader>
-                <Link href={`/profile/${article.author.username}`} className="w-fit group">
+                <Link href={`/${article.author.username}`} className="w-fit group">
                     <div className="py-2 flex items-center gap-3 w-fit">
                         <ProfileAvatar username={article.author.username} imageUrl={article.author.avatarImage} />
                         <div className="flex flex-col">

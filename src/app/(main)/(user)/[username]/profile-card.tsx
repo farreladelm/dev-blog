@@ -9,6 +9,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { Link2 } from "lucide-react"
 import Link from "next/link"
 import { IoGlobe, IoLogoGithub } from "react-icons/io5"
 
@@ -34,11 +35,11 @@ export function ProfileCard({ user, isAuthor }: ProfileCardProps) {
                     {user.bio ? user.bio : "Bio not found"}
                 </CardDescription>
             </CardHeader>
-            <CardContent className="flex gap-4 justify-center items-center text-xs">
-                <p className="text-muted-foreground">Joined On Jan 2026</p>
-                <div className="flex gap-2">
-                    {user.githubUrl && <Link href={user.githubUrl} className="padding-1 rounded-full border border-transparent hover:border-muted-foreground"><IoLogoGithub className="size-6" /></Link>}
-                    {user.websiteUrl && <Link href={user.websiteUrl} className="underline text-muted-foreground hover:text-foreground">{user.websiteUrl}</Link>}
+            <CardContent className="flex gap-8 justify-center items-center text-xs">
+                <p className="text-muted-foreground">Joined On {user.createdAt.toLocaleDateString("en-US", { month: "short", year: "numeric" })}</p>
+                <div className="flex gap-4 items-center">
+                    {user.websiteUrl && <Link href={user.websiteUrl} className="underline text-muted-foreground hover:text-foreground"><Link2 className="size-4 mr-1 inline" />{user.websiteUrl}</Link>}
+                    {user.githubUrl && <Link href={user.githubUrl} className="padding-1 rounded-full border border-transparent hover:border-muted-foreground"><IoLogoGithub className="size-5" /></Link>}
                 </div>
             </CardContent>
         </Card>

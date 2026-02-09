@@ -20,18 +20,15 @@ interface SearchResultProps {
     query: string;
     initialArticles: any[];
     initialHasMore: boolean;
-    initialCounts: {
-        articles: number;
-        tags: number;
-        people: number;
-    };
+    initialArticleCounts: number;
+
 }
 
 export default function SearchResultClient({
     query,
     initialArticles,
     initialHasMore,
-    initialCounts
+    initialArticleCounts
 }: SearchResultProps) {
     const [activeTab, setActiveTab] = useState<SearchType>('articles');
     const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +38,7 @@ export default function SearchResultClient({
         items: initialArticles,
         hasMore: initialHasMore,
         isLoaded: true,
-        count: initialCounts.articles
+        count: initialArticleCounts
     });
     const [tagsData, setTagsData] = useState({
         items: [] as string[],

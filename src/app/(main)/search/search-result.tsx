@@ -18,7 +18,7 @@ export default async function SearchResult({ query }: { query: string }) {
             query={query}
             initialArticles={articles}
             initialHasMore={hasMore}
-            initialCounts={{ articles: articles.length, tags: 0, people: 0 }}
+            initialArticleCounts={articles.length}
         />
 
     );

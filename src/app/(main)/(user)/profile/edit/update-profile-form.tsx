@@ -9,8 +9,11 @@ import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/c
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+
+const MAX_CHAR_LENGTH = 200;
 
 export default function UpdateProfileForm({ user }: { user: User }) {
     const [formKey, setFormKey] = useState(0);
@@ -21,7 +24,13 @@ export default function UpdateProfileForm({ user }: { user: User }) {
 function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () => void }) {
     const updateProfileWithUsernameAction = updateProfile.bind(null, user.username);
     const [data, action, isPending] = useActionState(updateProfileWithUsernameAction, undefined);
+    const [imageError, setImageError] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
+    // Character count states
+    const [bioCount, setBioCount] = useState(user.bio?.length || 0);
+    const [skillsCount, setSkillsCount] = useState(user.skillsOrLanguages?.length || 0);
+    const [availableCount, setAvailableCount] = useState(user.availableFor?.length || 0);
 
     useEffect(() => {
         if (!data) return;
@@ -42,9 +51,57 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
         onCancel();
     };
 
+    const validateImageFile = (file: File | null): boolean => {
+        setImageError(null);
+
+        if (!file) {
+            return true; // No file selected is valid (optional field)
+        }
+
+        // Check if file is an image
+        const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validImageTypes.includes(file.type)) {
+            setImageError("Please upload a valid image file (JPEG, PNG, GIF, or WebP)");
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+            return false;
+        }
+
+        // Check file size (5MB = 5 * 1024 * 1024 bytes)
+        const maxSize = 5 * 1024 * 1024;
+        if (file.size > maxSize) {
+            setImageError("Image size must be less than 5MB");
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+            return false;
+        }
+
+        return true;
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0] || null;
+        validateImageFile(file);
+    };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        const formData = new FormData(e.currentTarget);
+        const file = formData.get('avatarImage') as File;
+
+        if (file && file.size > 0) {
+            if (!validateImageFile(file)) {
+                e.preventDefault();
+                toast.error("Please fix the image upload errors before submitting");
+                return;
+            }
+        }
+    };
+
     return (
-        <form className="flex flex-col w-full max-w-2xl gap-4 mx-auto" action={action}>
-            <h1 className="text-3xl text-red-300 font-bold">@{user.username}</h1>
+        <form className="flex flex-col w-full max-w-2xl gap-4 mx-auto" action={action} onSubmit={handleSubmit}>
+            <Link href={`/${user.username}`} className="text-3xl text-red-300 font-bold">@{user.username}</Link>
             <Card>
                 <CardHeader>
                     <CardTitle>User Details</CardTitle>
@@ -92,18 +149,24 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                                 <FieldError>{fieldErrors.username}</FieldError>
                             )}
                         </Field>
-                        <Field data-invalid={!!fieldErrors?.avatarImage}>
+                        <Field data-invalid={!!fieldErrors?.avatarImage || !!imageError}>
                             <FieldLabel htmlFor="avatarImage">Profile Image</FieldLabel>
+                            <FieldDescription>Upload an image (JPEG, PNG, GIF, or WebP) under 5MB</FieldDescription>
                             <div className="flex gap-4 items-center">
                                 <ProfileAvatar username={formValues.username} imageUrl={formValues.avatarImage} />
                                 <Input
+                                    ref={fileInputRef}
                                     type="file"
                                     id="avatarImage"
                                     name="avatarImage"
-                                    placeholder="Your avatar image"
-                                    aria-invalid={!!fieldErrors?.avatarImage}
+                                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                                    onChange={handleFileChange}
+                                    aria-invalid={!!fieldErrors?.avatarImage || !!imageError}
                                 />
                             </div>
+                            {imageError && (
+                                <FieldError>{imageError}</FieldError>
+                            )}
                             {!!fieldErrors?.avatarImage && (
                                 <FieldError>{fieldErrors.avatarImage}</FieldError>
                             )}
@@ -132,6 +195,20 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                                 <FieldError>{fieldErrors.websiteUrl}</FieldError>
                             )}
                         </Field>
+                        <Field data-invalid={!!fieldErrors?.githubUrl}>
+                            <FieldLabel htmlFor="githubUrl">GitHub Url</FieldLabel>
+                            <Input
+                                type="text"
+                                id="githubUrl"
+                                name="githubUrl"
+                                defaultValue={formValues.githubUrl ?? ""}
+                                placeholder="https://github.com/username"
+                                aria-invalid={!!fieldErrors?.githubUrl}
+                            />
+                            {!!fieldErrors?.githubUrl && (
+                                <FieldError>{fieldErrors.githubUrl}</FieldError>
+                            )}
+                        </Field>
                         <Field data-invalid={!!fieldErrors?.location}>
                             <FieldLabel htmlFor="location">Location</FieldLabel>
                             <Input
@@ -147,13 +224,20 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                             )}
                         </Field>
                         <Field data-invalid={!!fieldErrors?.bio}>
-                            <FieldLabel htmlFor="bio">Bio</FieldLabel>
+                            <div className="flex items-center justify-between">
+                                <FieldLabel htmlFor="bio">Bio</FieldLabel>
+                                <span className={`text-sm ${bioCount > MAX_CHAR_LENGTH ? 'text-destructive font-semibold' : 'text-muted-foreground'}`}>
+                                    {bioCount}/{MAX_CHAR_LENGTH}
+                                </span>
+                            </div>
                             <Textarea
                                 id="bio"
                                 name="bio"
                                 defaultValue={formValues.bio ?? ""}
                                 placeholder="A short bio about what you do or write about"
                                 aria-invalid={!!fieldErrors?.bio}
+                                maxLength={MAX_CHAR_LENGTH}
+                                onChange={(e) => setBioCount(e.target.value.length)}
                             />
                             {!!fieldErrors?.bio && (
                                 <FieldError>{fieldErrors.bio}</FieldError>
@@ -198,7 +282,12 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                             )}
                         </Field>
                         <Field data-invalid={!!fieldErrors?.skillsOrLanguages}>
-                            <FieldLabel htmlFor="skillsOrLanguages">Skills or Languages</FieldLabel>
+                            <div className="flex items-center justify-between">
+                                <FieldLabel htmlFor="skillsOrLanguages">Skills or Languages</FieldLabel>
+                                <span className={`text-sm ${skillsCount > MAX_CHAR_LENGTH ? 'text-destructive font-semibold' : 'text-muted-foreground'}`}>
+                                    {skillsCount}/{MAX_CHAR_LENGTH}
+                                </span>
+                            </div>
                             <FieldDescription>What do you enjoy working with most? List your core tools, languages, or areas of expertise.</FieldDescription>
                             <Textarea
                                 id="skillsOrLanguages"
@@ -206,13 +295,20 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                                 defaultValue={formValues.skillsOrLanguages ?? ""}
                                 placeholder="e.g. TypeScript, React, Go, PostgreSQL"
                                 aria-invalid={!!fieldErrors?.skillsOrLanguages}
+                                maxLength={MAX_CHAR_LENGTH}
+                                onChange={(e) => setSkillsCount(e.target.value.length)}
                             />
                             {!!fieldErrors?.skillsOrLanguages && (
                                 <FieldError>{fieldErrors.skillsOrLanguages}</FieldError>
                             )}
                         </Field>
                         <Field data-invalid={!!fieldErrors?.availableFor}>
-                            <FieldLabel htmlFor="availableFor">Available for</FieldLabel>
+                            <div className="flex items-center justify-between">
+                                <FieldLabel htmlFor="availableFor">Available for</FieldLabel>
+                                <span className={`text-sm ${availableCount > MAX_CHAR_LENGTH ? 'text-destructive font-semibold' : 'text-muted-foreground'}`}>
+                                    {availableCount}/{MAX_CHAR_LENGTH}
+                                </span>
+                            </div>
                             <FieldDescription>Describe how people can reach out or collaborate with you, and what you're currently available for.</FieldDescription>
                             <Textarea
                                 id="availableFor"
@@ -220,6 +316,8 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                                 defaultValue={formValues.availableFor ?? ""}
                                 placeholder="Freelance, open source, mentoring, discussions"
                                 aria-invalid={!!fieldErrors?.availableFor}
+                                maxLength={MAX_CHAR_LENGTH}
+                                onChange={(e) => setAvailableCount(e.target.value.length)}
                             />
                             {!!fieldErrors?.availableFor && (
                                 <FieldError>{fieldErrors.availableFor}</FieldError>

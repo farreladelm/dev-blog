@@ -26,6 +26,7 @@ const updateProfileSchema = z.object({
     .max(200, "Bio must be at most 200 characters")
     .optional(),
   websiteUrl: z.url("Invalid URL").optional().or(z.literal("")),
+  githubUrl: z.url("Invalid GitHub URL").optional().or(z.literal("")),
   location: z
     .string()
     .trim()
@@ -58,6 +59,7 @@ export type UpdateProfileActionState = ActionState<
   | "email"
   | "username"
   | "avatarImage"
+  | "githubUrl"
   | "websiteUrl"
   | "location"
   | "bio"
@@ -86,6 +88,7 @@ export async function updateProfile(
       username: formData.get("username"),
       bio: formData.get("bio") || undefined,
       websiteUrl: formData.get("websiteUrl") || undefined,
+      githubUrl: formData.get("githubUrl") || undefined,
       location: formData.get("location") || undefined,
       jobTitle: formData.get("jobTitle") || undefined,
       education: formData.get("education") || undefined,
@@ -116,6 +119,7 @@ export async function updateProfile(
       username: newUsername,
       bio,
       websiteUrl,
+      githubUrl,
       location,
       jobTitle,
       education,
@@ -160,6 +164,7 @@ export async function updateProfile(
         username: newUsername,
         bio: bio && bio.length > 0 ? bio : null,
         websiteUrl: websiteUrl && websiteUrl.length > 0 ? websiteUrl : null,
+        githubUrl: githubUrl && githubUrl.length > 0 ? githubUrl : null,
         location: location && location.length > 0 ? location : null,
         jobTitle: jobTitle && jobTitle.length > 0 ? jobTitle : null,
         education: education && education.length > 0 ? education : null,

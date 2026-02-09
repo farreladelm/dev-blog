@@ -68,7 +68,15 @@ export default async function Page({ params }: { params: Promise<{ username: str
                 <div className="flex flex-col gap-4 mt-10 lg:mt-0">
                     <h1 className="font-bold lg:hidden">Articles</h1>
                     <div className="w-full flex flex-col gap-2">
-                        {articles ? articles.map(article => <ArticleCard article={article} key={article.id}></ArticleCard>) : <p>No published article</p>}
+                        {articles && articles.length > 0 ? articles.map(article => <ArticleCard article={article} key={article.id}></ArticleCard>) :
+                            <Card>
+                                <CardContent className="items-center">
+                                    <div className="flex flex-col gap-2 items-center">
+                                        <span className="text-muted-foreground">No published articles found.</span>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        }
                     </div>
                 </div>
             </div>

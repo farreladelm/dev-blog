@@ -3,9 +3,14 @@ import { getArticlesByAuthor } from "@/actions/article";
 import { ArticleList } from "./article-list";
 import { getSession } from "@/lib/auth";
 
-export default async function Page({ params }: { params: Promise<{ username: string }> }) {
-    const result = await getArticlesByAuthor((await params).username);
+export default async function Page() {
     const session = await getSession();
+
+    if (!session) {
+        return <h1>Please log in to view your articles.</h1>;
+    }
+
+    const result = await getArticlesByAuthor(session.username);
 
     if (!result.success) {
         return <h1>Error</h1>;
@@ -24,7 +29,20 @@ export default async function Page({ params }: { params: Promise<{ username: str
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <ArticleList articles={articles!} userId={userId} />
+                    {articles && articles.length > 0 ? (
+                        <ArticleList articles={articles!} userId={userId} />
+                    ) : (
+                        <Card>
+                            <CardContent className="items-center">
+                                <div className="flex flex-col gap-2 items-center">
+                                    <span className="text-muted-foreground">No articles found.</span>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )
+
+                    }
+
                 </CardContent>
             </Card>
         </div >

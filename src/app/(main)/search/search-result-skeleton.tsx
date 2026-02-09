@@ -1,6 +1,6 @@
 import ArticleListSkeleton from "@/components/article/article-list-skeleton";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -19,18 +19,29 @@ export default function SearchResultSkeleton({ query }: { query: string }) {
                 </ItemActions>
             </Item>
             <div className="grid grid-cols-[280px_1fr] gap-4">
-                <aside className="w-full shrink-0 flex flex-col gap-2">
-                    <Button variant="outline" className="w-full justify-between">
+                <ButtonGroup className="w-full shrink-0" orientation="vertical">
+                    <Button
+                        variant="outline"
+                        className="w-full justify-between cursor-pointer"
+                    >
                         <p>Articles</p>
-                        <Badge variant="secondary" className="rounded"><Skeleton className="h-4 w-8" /></Badge>
+                        <Skeleton className="size-6 rounded" />
                     </Button>
-                    <Button variant="outline" className="w-full justify-between">
+                    <Button
+                        variant="outline"
+                        className="w-full justify-between cursor-pointer"
+                    >
                         <p>Tags</p>
+                        <Skeleton className="size-6 rounded" />
                     </Button>
-                    <Button variant="outline" className="w-full justify-between">
-                        <p>People</p>
+                    <Button
+                        variant="outline"
+                        className="w-full justify-between cursor-pointer"
+                    >
+                        <p>Users</p>
+                        <Skeleton className="size-6 rounded" />
                     </Button>
-                </aside>
+                </ButtonGroup>
                 <div>
                     <ArticleListSkeleton />
                 </div>
