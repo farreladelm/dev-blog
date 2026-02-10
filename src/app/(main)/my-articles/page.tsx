@@ -1,7 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getArticlesByAuthor } from "@/actions/article";
 import { ArticleList } from "./article-list";
 import { getSession } from "@/lib/auth";
+import { Plus } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default async function Page() {
     const session = await getSession();
@@ -27,6 +30,13 @@ export default async function Page() {
                     <CardDescription>
                         Manage your articles
                     </CardDescription>
+                    <CardAction>
+                        <Button variant="outline" asChild>
+                            <Link href="/articles/new" className="flex items-center gap-2">
+                                <Plus className="size-5" /> Article
+                            </Link>
+                        </Button>
+                    </CardAction>
                 </CardHeader>
                 <CardContent>
                     {articles && articles.length > 0 ? (
@@ -42,7 +52,6 @@ export default async function Page() {
                     )
 
                     }
-
                 </CardContent>
             </Card>
         </div >

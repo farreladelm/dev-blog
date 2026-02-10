@@ -8,8 +8,9 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { STATUS } from "@/constants/article";
 import { ActionResult, ActionState, ArticleDraft } from "@/lib/types";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { Article, Prisma } from "@/app/generated/prisma/client";
+import { redis } from "@/lib/redis";
 
 const tagSchema = z
   .string()
@@ -177,7 +178,7 @@ export async function submitArticleUpdateForm(
     const publishedAt =
       isPublished && !wasPublished ? new Date() : existingArticle.publishedAt;
 
-    await prisma.article.update({
+    const updatedArticle = await prisma.article.update({
       where: { id: articleId },
       data: {
         title: data.title,
@@ -203,7 +204,10 @@ export async function submitArticleUpdateForm(
     revalidatePath("/articles");
     revalidatePath(`/articles/${slug}`);
 
-    redirect(`/articles/${slug}`);
+    return {
+      success: true,
+      data: { article: updatedArticle, authorUsername: session.username },
+    };
   } catch (error) {
     console.error("Error on updating article:", error);
 
@@ -349,13 +353,17 @@ export async function toggleArticleStatus(slug: string) {
     const statusMessage =
       newStatus === STATUS.PUBLISHED ? "publish" : "unpublish";
 
+    const publishedAt = newStatus === STATUS.PUBLISHED ? new Date() : null;
+
     await prisma.article.update({
       where: { id: article.id },
-      data: { status: newStatus },
+      data: { status: newStatus, publishedAt },
     });
 
     revalidatePath(`/articles/${slug}`);
-    revalidatePath("/articles");
+    revalidatePath("/");
+    revalidatePath("/my-articles");
+    revalidatePath(`/${session.username}`);
     return {
       success: true,
       data: { message: `Successfully ${statusMessage} article` },
@@ -366,31 +374,39 @@ export async function toggleArticleStatus(slug: string) {
   }
 }
 
-export async function incrementView(id: string) {
-  const cookieStore = await cookies();
-  const cookieName = `article_${id}_viewed`;
-  const hasViewed = cookieStore.get(cookieName);
+async function getFingerprint(articleId: string): Promise<string> {
+  const headerStore = await headers();
+  const ip = headerStore.get("x-forwarded-for") ?? "unknown";
+  const userAgent = headerStore.get("user-agent") ?? "";
 
-  if (hasViewed) {
-    return { success: true, data: { message: "Already Counted" } };
-  }
+  const raw = `${ip}-${userAgent}-${articleId}`;
+  const buffer = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(raw),
+  );
+  return Array.from(new Uint8Array(buffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+export async function incrementView(
+  articleId: string,
+): Promise<ActionResult<{ views: number }>> {
+  const fingerprint = await getFingerprint(articleId);
+  const key = `view:${fingerprint}`;
+
+  const alreadyViewed = await redis.get(key);
+  if (alreadyViewed) return { success: false, error: "Already counted" };
 
   try {
-    const article = await prisma.article.update({
-      where: { id },
-      data: {
-        views: { increment: 1 },
-      },
-    });
+    await redis.setex(key, 60 * 60 * 24, "1"); // expires in 24 hours
 
-    cookieStore.set(cookieName, "true", {
-      maxAge: 60 * 60 * 24 * 30, // 30 days
-      httpOnly: true,
-      sameSite: "lax",
+    const article = await prisma.article.update({
+      where: { id: articleId },
+      data: { views: { increment: 1 } },
     });
 
     revalidatePath(`/articles/${article.slug}`);
-
     return { success: true, data: { views: article.views } };
   } catch (error) {
     console.error("Error updating view count:", error);

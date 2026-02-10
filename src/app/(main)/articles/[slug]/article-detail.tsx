@@ -1,10 +1,12 @@
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import ProfileAvatar from "../profile-avatar";
-import MarkdownRenderer from "../markdown-renderer";
-import Tag from "./tag";
+import ProfileAvatar from "@/components/shared/profile-avatar";
+import MarkdownRenderer from "@/components/shared/markdown-renderer";
+import Tag from "@/components/article/tag";
 import LikeButton from "./like-button";
 import { ArticleWithUserAndTag } from "@/lib/types";
+import { incrementView } from "@/actions/article";
+import ViewTracker from "./view-tracker";
 
 type ArticleDetailProps = {
     article: ArticleWithUserAndTag,
@@ -13,9 +15,8 @@ type ArticleDetailProps = {
 }
 
 export default async function ArticleDetail({ article, userId, isLikedByCurrentUser }: ArticleDetailProps) {
-    console.log(userId);
     const isAuthor = userId && userId === article.authorId;
-    console.log(isAuthor);
+
     return (
         <article className="flex justify-center w-full gap-4 lg:px-20">
 
@@ -58,6 +59,7 @@ export default async function ArticleDetail({ article, userId, isLikedByCurrentU
                 </CardContent>
             </Card>
 
+            {article.publishedAt && <ViewTracker articleId={article.id} />}
         </article>
     )
 }

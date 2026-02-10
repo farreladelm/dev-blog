@@ -1,4 +1,3 @@
-// components/ArticleList.tsx
 import { getPublishedArticles } from "@/actions/article"
 import { toast } from "sonner";
 import ArticleListInfinite from "./article-list-infinite";

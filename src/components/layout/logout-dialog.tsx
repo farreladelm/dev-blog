@@ -11,7 +11,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { useActionState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 

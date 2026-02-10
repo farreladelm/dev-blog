@@ -1,23 +1,16 @@
 import { ArticleWithUserAndTag } from "@/lib/types";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
-import ProfileAvatar from "../profile-avatar";
+import ProfileAvatar from "../shared/profile-avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import Tag from "./tag";
+import UserDetail from "./user-detail";
 
 export default function ArticleCard({ article }: { article: ArticleWithUserAndTag }) {
     return (
         <Card className="gap-4">
             <CardHeader>
-                <Link href={`/${article.author.username}`} className="w-fit group">
-                    <div className="py-2 flex items-center gap-3 w-fit">
-                        <ProfileAvatar username={article.author.username} imageUrl={article.author.avatarImage} />
-                        <div className="flex flex-col">
-                            <span className="font-medium group-hover:underline">{article.author.name}</span>
-                            <span className="text-xs text-muted-foreground">{article.author.username}</span>
-                        </div>
-                    </div>
-                </Link>
+                <UserDetail username={article.author.username} name={article.author.name} imageUrl={article.author.avatarImage} />
             </CardHeader>
             <CardContent className="flex flex-col gap-2 h-full">
                 <h1 className="text-2xl font-bold">{article.title || "Untitled Article"}</h1>

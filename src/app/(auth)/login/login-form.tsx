@@ -17,25 +17,22 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { useActionState } from "react"
-import { registerAction } from "@/actions/auth"
+import { loginAction } from "@/actions/auth"
 import { Loader2 } from "lucide-react"
 import Link from "next/link"
 
-export function RegisterForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function LoginForm() {
 
-  const [data, action, isPending] = useActionState(registerAction, undefined);
+  const [data, action, isPending] = useActionState(loginAction, undefined);
 
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="flex flex-col gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>Register</CardTitle>
+          <CardTitle>Login to your account</CardTitle>
           <CardDescription>
-            Enter your email below to register for an account
+            Enter your email below to login to your account
           </CardDescription>
           {data?.error && (
             <p className="mt-2 text-sm text-red-600">{data.error}</p>
@@ -51,30 +48,16 @@ export function RegisterForm({
                   type="email"
                   name="email"
                   placeholder="m@example.com"
-                  required
                 />
                 {data?.fieldErrors?.email && (
                   <small className="text-sm text-red-600">{data.fieldErrors.email}</small>
                 )}
               </Field>
               <Field>
-                <FieldLabel htmlFor="username">Username</FieldLabel>
-                <Input
-                  id="username"
-                  type="text"
-                  name="username"
-                  placeholder="example_user"
-                  required
-                />
-                {data?.fieldErrors?.username && (
-                  <small className="text-sm text-red-600">{data.fieldErrors.username}</small>
-                )}
-              </Field>
-              <Field>
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                 </div>
-                <Input id="password" type="password" name="password" placeholder="password..." required />
+                <Input id="password" type="password" name="password" placeholder="password..." />
                 {data?.fieldErrors?.password && (
                   <small className="text-sm text-red-600">{data.fieldErrors.password}</small>
                 )}
@@ -83,10 +66,10 @@ export function RegisterForm({
                 <Button type="submit" disabled={isPending} className="cursor-pointer">
                   {isPending ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : "Register"}
+                  ) : "Login"}
                 </Button>
                 <FieldDescription className="text-center">
-                  Already have an account? <Link href="/login">Sign in</Link>
+                  Don&apos;t have an account? <Link href="/register">Sign up</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>

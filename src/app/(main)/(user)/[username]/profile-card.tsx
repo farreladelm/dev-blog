@@ -1,5 +1,5 @@
 import { User } from "@/app/generated/prisma/client"
-import ProfileAvatar from "@/components/profile-avatar"
+import ProfileAvatar from "@/components/shared/profile-avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {

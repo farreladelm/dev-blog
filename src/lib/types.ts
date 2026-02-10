@@ -59,3 +59,9 @@ export type UserProfile = Pick<
   User,
   "id" | "name" | "username" | "avatarImage" | "bio"
 >;
+
+export type SessionUser = {
+  username: string;
+  name: string;
+  avatarImage: string | null;
+};

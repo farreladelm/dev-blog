@@ -1,8 +1,9 @@
-import ProfileAvatar from "@/components/profile-avatar";
+import ProfileAvatar from "@/components/shared/profile-avatar";
 import { Button } from "@/components/ui/button";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { UserProfile } from "@/lib/types";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 
 export default function UserSearchResult({ users }: { users: UserProfile[] }) {
     return (
@@ -13,17 +14,14 @@ export default function UserSearchResult({ users }: { users: UserProfile[] }) {
                         <ProfileAvatar imageUrl={user.avatarImage} username={user.username} classname="size-10" />
                     </ItemMedia>
                     <ItemContent>
-                        <ItemTitle>{user.username}</ItemTitle>
-                        <ItemDescription>{user.bio}</ItemDescription>
+                        <ItemTitle>{user.name}</ItemTitle>
+                        <ItemDescription>@{user.username}</ItemDescription>
                     </ItemContent>
                     <ItemActions>
                         <Button
-                            size="icon-sm"
                             variant="outline"
-                            className="rounded-full"
-                            aria-label="Invite"
                         >
-                            <Plus />
+                            <Link href={`/${user.username}`}>View Profile</Link>
                         </Button>
                     </ItemActions>
                 </Item>

@@ -2,7 +2,7 @@
 
 import { updateProfile } from "@/actions/profile";
 import { User } from "@/app/generated/prisma/client";
-import ProfileAvatar from "@/components/profile-avatar";
+import ProfileAvatar from "@/components/shared/profile-avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
@@ -224,12 +224,8 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                             )}
                         </Field>
                         <Field data-invalid={!!fieldErrors?.bio}>
-                            <div className="flex items-center justify-between">
-                                <FieldLabel htmlFor="bio">Bio</FieldLabel>
-                                <span className={`text-sm ${bioCount > MAX_CHAR_LENGTH ? 'text-destructive font-semibold' : 'text-muted-foreground'}`}>
-                                    {bioCount}/{MAX_CHAR_LENGTH}
-                                </span>
-                            </div>
+                            <FieldLabel htmlFor="bio">Bio</FieldLabel>
+
                             <Textarea
                                 id="bio"
                                 name="bio"
@@ -242,6 +238,9 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                             {!!fieldErrors?.bio && (
                                 <FieldError>{fieldErrors.bio}</FieldError>
                             )}
+                            <FieldDescription className={`text-sm text-right ${bioCount >= MAX_CHAR_LENGTH ? 'text-amber-500 font-semibold' : 'text-muted-foreground'}`}>
+                                {bioCount}/{MAX_CHAR_LENGTH}
+                            </FieldDescription>
                         </Field>
                     </FieldGroup>
                 </CardContent>
@@ -282,12 +281,7 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                             )}
                         </Field>
                         <Field data-invalid={!!fieldErrors?.skillsOrLanguages}>
-                            <div className="flex items-center justify-between">
-                                <FieldLabel htmlFor="skillsOrLanguages">Skills or Languages</FieldLabel>
-                                <span className={`text-sm ${skillsCount > MAX_CHAR_LENGTH ? 'text-destructive font-semibold' : 'text-muted-foreground'}`}>
-                                    {skillsCount}/{MAX_CHAR_LENGTH}
-                                </span>
-                            </div>
+                            <FieldLabel htmlFor="skillsOrLanguages">Skills or Languages</FieldLabel>
                             <FieldDescription>What do you enjoy working with most? List your core tools, languages, or areas of expertise.</FieldDescription>
                             <Textarea
                                 id="skillsOrLanguages"
@@ -298,17 +292,15 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                                 maxLength={MAX_CHAR_LENGTH}
                                 onChange={(e) => setSkillsCount(e.target.value.length)}
                             />
+                            <FieldDescription className={`text-sm text-right ${skillsCount >= MAX_CHAR_LENGTH ? 'text-amber-500 font-semibold' : 'text-muted-foreground'}`}>
+                                {skillsCount}/{MAX_CHAR_LENGTH}
+                            </FieldDescription>
                             {!!fieldErrors?.skillsOrLanguages && (
                                 <FieldError>{fieldErrors.skillsOrLanguages}</FieldError>
                             )}
                         </Field>
                         <Field data-invalid={!!fieldErrors?.availableFor}>
-                            <div className="flex items-center justify-between">
-                                <FieldLabel htmlFor="availableFor">Available for</FieldLabel>
-                                <span className={`text-sm ${availableCount > MAX_CHAR_LENGTH ? 'text-destructive font-semibold' : 'text-muted-foreground'}`}>
-                                    {availableCount}/{MAX_CHAR_LENGTH}
-                                </span>
-                            </div>
+                            <FieldLabel htmlFor="availableFor">Available for</FieldLabel>
                             <FieldDescription>Describe how people can reach out or collaborate with you, and what you're currently available for.</FieldDescription>
                             <Textarea
                                 id="availableFor"
@@ -319,6 +311,9 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                                 maxLength={MAX_CHAR_LENGTH}
                                 onChange={(e) => setAvailableCount(e.target.value.length)}
                             />
+                            <FieldDescription className={`text-sm text-right ${availableCount >= MAX_CHAR_LENGTH ? 'text-amber-500 font-semibold' : 'text-muted-foreground'}`}>
+                                {availableCount}/{MAX_CHAR_LENGTH}
+                            </FieldDescription>
                             {!!fieldErrors?.availableFor && (
                                 <FieldError>{fieldErrors.availableFor}</FieldError>
                             )}

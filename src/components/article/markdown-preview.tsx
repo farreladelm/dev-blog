@@ -1,12 +1,20 @@
 import { CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import MarkdownRenderer from "../markdown-renderer";
+import MarkdownRenderer from "../shared/markdown-renderer";
 import UserDetail from "./user-detail";
+import { SessionUser } from "@/lib/types";
 
-export default function MarkdownPreview({ title, body }: { title: string; body: string }) {
+type MarkdownPreviewProps = {
+    title: string;
+    body: string;
+    session?: SessionUser | null;
+};
+
+export default function MarkdownPreview({ title, body, session = null }: MarkdownPreviewProps) {
+
     return (
         <>
             <CardHeader>
-                <UserDetail name={"Your Name"} username={"username"} />
+                <UserDetail name={session?.name || "Your Name"} username={session?.username || "username"} imageUrl={session?.avatarImage || null} />
                 <CardTitle>
                     <h1 className="text-4xl font-bold">
                         {title}

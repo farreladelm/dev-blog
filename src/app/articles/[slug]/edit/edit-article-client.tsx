@@ -1,4 +1,3 @@
-// app/articles/[slug]/edit/edit-article-client.tsx
 "use client";
 
 import ArticleHeader from "@/components/article/article-header";
@@ -14,9 +13,14 @@ import ArticleSubmitButtons from "@/components/article/article-submit-buttons";
 
 interface EditArticleClientProps {
     article: ArticleWithUserAndTag;
+    session?: {
+        username: string;
+        name: string;
+        avatarImage: string | null;
+    } | null;
 }
 
-export default function EditArticleClient({ article }: EditArticleClientProps) {
+export default function EditArticleClient({ article, session = null }: EditArticleClientProps) {
     const router = useRouter();
 
     const [mode, setMode] = useState<"edit" | "preview">("edit");
@@ -42,7 +46,7 @@ export default function EditArticleClient({ article }: EditArticleClientProps) {
 
         if (data.success) {
             toast.success("Article updated successfully!");
-            router.push(`/articles/${article.slug}`);
+            router.push(`/articles/${data.data.article.slug}`);
         } else if (!data.success) {
             if (data.error) toast.error(data.error);
             if (data.fieldErrors) {
@@ -62,7 +66,7 @@ export default function EditArticleClient({ article }: EditArticleClientProps) {
                         {mode === "edit" ? (
                             <ArticleDraftEditor draft={draft} onDraftChange={setDraft} />
                         ) : (
-                            <MarkdownPreview title={draft.title} body={draft.body} />
+                            <MarkdownPreview title={draft.title} body={draft.body} session={session} />
                         )}
                     </Card>
 

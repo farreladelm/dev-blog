@@ -50,8 +50,8 @@ export default function TagInput({ value, onChange }: Props) {
                 setLoading(true);
                 const result = await searchTags(debouncedInput);
 
-                if (active) {
-                    setSuggestions(result.filter((t) => !value.includes(t)));
+                if (active && result.success) {
+                    setSuggestions(result.data.tags.filter((t) => !value.includes(t)));
                     setLoading(false);
                 }
                 return;

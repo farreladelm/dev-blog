@@ -33,7 +33,7 @@ export default function NewArticleHeader(
                     >Preview</Button>
                 </nav>
             </div>
-            <Link href="/articles">
+            <Link href="/">
                 <X className="absolute top-4 right-4 h-6 w-6" />
             </Link>
         </header>

@@ -1,7 +1,7 @@
 "use client"
 
 import { PiThumbsUp, PiThumbsUpFill } from 'react-icons/pi'
-import { Button } from '../ui/button'
+import { Button } from '../../../../components/ui/button'
 import { useState } from 'react';
 import { likeArticle, unlikeArticle } from '@/actions/article';
 import { toast } from 'sonner';
@@ -35,7 +35,7 @@ export default function LikeButton({
                 ? await unlikeArticle(articleId)
                 : await likeArticle(articleId);
 
-            if (!result.data) {
+            if (!result.success) {
                 setLikes(previousLikes);
                 setIsLiked(previousIsLiked);
                 toast.error(result.error || 'Failed to update like');
@@ -52,21 +52,19 @@ export default function LikeButton({
     };
 
     return (
-        <div className="flex items-center gap-2">
-            <Button
-                onClick={handleLike}
-                disabled={isLoading}
-                variant="ghost"
-                type="button"
-                className="p-2!"
-                aria-label={isLiked ? 'Unlike article' : 'Like article'}
-            >
-                {isLiked ? (
-                    <PiThumbsUpFill className="size-6 text-red-300" />
-                ) : (
-                    <PiThumbsUp className="size-6" />
-                )}
-            </Button>
-        </div>
+        <Button
+            onClick={handleLike}
+            disabled={isLoading}
+            variant="ghost"
+            type="button"
+            className="p-2! cursor-pointer"
+            aria-label={isLiked ? 'Unlike article' : 'Like article'}
+        >
+            {isLiked ? (
+                <PiThumbsUpFill className="size-6 text-red-300" />
+            ) : (
+                <PiThumbsUp className="size-6" />
+            )}
+        </Button>
     );
 }

@@ -2,7 +2,7 @@ import Link from "next/link"
 import { FaLaptopCode } from "react-icons/fa";
 import { IoAdd } from "react-icons/io5";
 import SearchBar from "./search-bar";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { getSession } from "@/lib/auth";
 
 
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { LogoutDialog } from "./logout-dialog";
-import ProfileAvatar from "./profile-avatar";
+import ProfileAvatar from "@/components/shared/profile-avatar";
 
 const Header = async () => {
     const authUser = await getSession();

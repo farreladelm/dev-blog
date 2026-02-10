@@ -1,5 +1,5 @@
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { Skeleton } from "../ui/skeleton";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../components/ui/card";
+import { Skeleton } from "../../../../components/ui/skeleton";
 
 export default function ArticleDetailSkeleton() {
     return (
