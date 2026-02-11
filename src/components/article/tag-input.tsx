@@ -69,15 +69,21 @@ export default function TagInput({ value, onChange }: Props) {
     }, [debouncedInput, isFocused, value]);
 
 
+    const isValidTagChar = (str: string) => /^[a-z0-9]*$/.test(str);
+
     const addTag = useCallback((tag: string) => {
         if (value.length === MAX_ARTICLE_TAGS) {
             toast.warning(`You can only add up to ${MAX_ARTICLE_TAGS} tags.`);
-
             return;
         }
 
-        const name = tag.trim();
+        const name = tag.trim().toLowerCase();
         if (!name || value.includes(name)) return;
+
+        if (!isValidTagChar(name)) {
+            toast.warning("Tags can only contain letters (a-z) and numbers.");
+            return;
+        }
 
         onChange([...value, name]);
         setInput("");
@@ -85,7 +91,6 @@ export default function TagInput({ value, onChange }: Props) {
     }, [value, onChange]);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        console.log(e.key);
         if (e.key === "Enter") {
             e.preventDefault();
             addTag(input);
@@ -133,7 +138,10 @@ export default function TagInput({ value, onChange }: Props) {
                 <input
                     value={input}
                     maxLength={MAX_TAG_CHARACTERS}
-                    onChange={(e) => setInput(e.target.value)}
+                    onChange={(e) => {
+                        const cleaned = e.target.value.toLowerCase().replace(/[^a-z0-9]/g, "");
+                        setInput(cleaned);
+                    }}
                     onKeyDown={handleKeyDown}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
