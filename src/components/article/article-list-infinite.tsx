@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import ArticleCard from './article-card';
 import { Loader2 } from 'lucide-react';
 import { ArticleWithUserAndTag } from '@/lib/types';
+import { Card, CardContent, CardDescription } from '../ui/card';
 
 type ArticleListInfiniteProps = {
     initialArticles: ArticleWithUserAndTag[];
@@ -76,9 +77,17 @@ export default function ArticleListInfinite({
     return (
         <div>
             <div className="w-full grid grid-cols-1 gap-2">
-                {articles.map((article) => (
-                    <ArticleCard article={article} key={article.id} />
-                ))}
+                {articles.length === 0 ? (
+                    <Card>
+                        <CardContent>
+                            <CardDescription>No articles found.</CardDescription>
+                        </CardContent>
+                    </Card>
+                ) : (
+                    articles.map((article) => (
+                        <ArticleCard article={article} key={article.id} />
+                    ))
+                )}
             </div>
 
             <div ref={observerTarget} className="py-8 text-center">

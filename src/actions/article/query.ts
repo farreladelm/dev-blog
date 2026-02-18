@@ -4,6 +4,11 @@ import { STATUS } from "@/constants/article";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ActionResult, ArticleWithUserAndTag } from "@/lib/types";
+import {
+  articleIncludeWithTagName,
+  paginate,
+  processListResults,
+} from "./helpers";
 
 export async function getPublishedArticles(
   page: number = 1,
@@ -13,44 +18,19 @@ export async function getPublishedArticles(
 > {
   try {
     await new Promise((resolve) => setTimeout(resolve, 500));
-
-    const skip = (page - 1) * limit;
+    const { skip, take } = paginate(page, limit);
 
     const articles = await prisma.article.findMany({
       where: { status: STATUS.PUBLISHED },
       orderBy: { publishedAt: "desc" },
       skip,
-      take: limit + 1,
-      include: {
-        author: {
-          select: {
-            username: true,
-            name: true,
-            avatarImage: true,
-          },
-        },
-        tags: {
-          select: {
-            tag: {
-              select: {
-                name: true,
-              },
-            },
-          },
-        },
-      },
+      take,
+      include: articleIncludeWithTagName,
     });
 
-    const hasMore = articles.length > limit;
-    const articlesData = hasMore ? articles.slice(0, limit) : articles;
+    const { data: articlesData, hasMore } = processListResults(articles, limit);
 
-    return {
-      success: true,
-      data: {
-        articles: articlesData,
-        hasMore,
-      },
-    };
+    return { success: true, data: { articles: articlesData, hasMore } };
   } catch (error) {
     return {
       success: false,
@@ -72,18 +52,7 @@ export async function getArticleBySlug(slug: string): Promise<
     const article = await prisma.article.findUnique({
       where: { slug },
       include: {
-        author: {
-          select: {
-            username: true,
-            name: true,
-            avatarImage: true,
-          },
-        },
-        tags: {
-          include: {
-            tag: true,
-          },
-        },
+        ...articleIncludeWithTagName,
         likedBy: userId
           ? {
               where: { userId },
@@ -120,18 +89,7 @@ export async function getArticleForEditing(slug: string): Promise<
     const article = await prisma.article.findUnique({
       where: { slug },
       include: {
-        author: {
-          select: {
-            username: true,
-            name: true,
-            avatarImage: true,
-          },
-        },
-        tags: {
-          include: {
-            tag: true,
-          },
-        },
+        ...articleIncludeWithTagName,
       },
     });
 
@@ -163,18 +121,7 @@ export async function getArticlesByAuthor(username: string) {
         ...(status && { status }),
       },
       include: {
-        author: {
-          select: {
-            username: true,
-            name: true,
-            avatarImage: true,
-          },
-        },
-        tags: {
-          include: {
-            tag: true,
-          },
-        },
+        ...articleIncludeWithTagName,
       },
       orderBy: [{ createdAt: "desc" }, { publishedAt: "desc" }],
     });
@@ -194,7 +141,7 @@ export async function searchArticles(
   ActionResult<{ articles: ArticleWithUserAndTag[]; hasMore: boolean }>
 > {
   try {
-    const skip = (page - 1) * limit;
+    const { skip, take } = paginate(page, limit);
 
     const articles = await prisma.article.findMany({
       where: {
@@ -207,41 +154,59 @@ export async function searchArticles(
       },
       orderBy: { publishedAt: "desc" },
       skip,
-      take: limit + 1,
-      include: {
-        author: {
-          select: {
-            username: true,
-            name: true,
-            avatarImage: true,
-          },
-        },
-        tags: {
-          select: {
-            tag: {
-              select: {
-                name: true,
-              },
-            },
-          },
-        },
-      },
+      take,
+      include: articleIncludeWithTagName,
     });
 
-    const hasMore = articles.length > limit;
-    const articlesData = hasMore ? articles.slice(0, limit) : articles;
+    const { data: articlesData, hasMore } = processListResults(articles, limit);
 
-    return {
-      success: true,
-      data: {
-        articles: articlesData,
-        hasMore,
-      },
-    };
+    return { success: true, data: { articles: articlesData, hasMore } };
   } catch (error) {
     return {
       success: false,
       error: "Failed to search articles",
+    };
+  }
+}
+
+export async function getPublishedArticlesOfTag(
+  page: number = 1,
+  limit: number = 8,
+  tag: string,
+): Promise<
+  ActionResult<{
+    articles: ArticleWithUserAndTag[];
+    hasMore: boolean;
+    count: number;
+  }>
+> {
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const { skip, take } = paginate(page, limit);
+
+    const where = {
+      status: STATUS.PUBLISHED,
+      tags: { some: { tag: { name: tag } } },
+    };
+
+    const [articles, count] = await Promise.all([
+      prisma.article.findMany({
+        where,
+        orderBy: { publishedAt: "desc" },
+        skip,
+        take,
+        include: articleIncludeWithTagName,
+      }),
+      prisma.article.count({ where }),
+    ]);
+
+    const { data: articlesData, hasMore } = processListResults(articles, limit);
+
+    return { success: true, data: { articles: articlesData, hasMore, count } };
+  } catch (error) {
+    return {
+      success: false,
+      error: `Failed to fetch articles of tag "${tag}"`,
     };
   }
 }

@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserrat.variable} antialiased dark`}
+        className={`${montserrat.variable} antialiased dark min-h-screen`}
       >
         {children}
         <Toaster position="top-center" />

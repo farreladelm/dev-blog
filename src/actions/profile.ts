@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getSession, createToken, setAuthCookie } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { ActionResult, ActionState, UserProfile } from "@/lib/types";
-import { User } from "@/app/generated/prisma/client";
+import { Prisma, User } from "@/app/generated/prisma/client";
 import { uploadAvatar, deleteAvatar } from "@/lib/upload-utils";
 
 const updateProfileSchema = z.object({
@@ -211,12 +211,18 @@ export async function getUserDetail(
       where: { username },
     });
 
-    if (!user) {
-      throw new Error("User not found");
-    }
-
     return { success: true, data: user };
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return {
+        success: false,
+        error:
+          error.code === "P2025"
+            ? "User not found"
+            : "Error getting user detail",
+      };
+    }
+
     console.error("Error getting user detail:", error);
     return { success: false, error: "Error getting user detail" };
   }

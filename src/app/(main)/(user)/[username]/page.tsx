@@ -10,13 +10,15 @@ import { STATUS } from "@/constants/article";
 
 export default async function Page({ params }: { params: Promise<{ username: string }> }) {
     const { username } = await params;
-    const articlesResult = await getArticlesByAuthor(username);
-    const session = await getSession();
+
     const userResult = await getUserDetail(username);
 
     if (!userResult.success) {
-        notFound();
+        throw new Error(userResult.error || "Failed to load user profile");
     }
+
+    const articlesResult = await getArticlesByAuthor(username);
+    const session = await getSession();
 
     const articles = articlesResult.data;
     const user = userResult.data;

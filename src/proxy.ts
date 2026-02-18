@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyToken } from "@/lib/auth";
 
-const protectedRoutes = ["/articles/new"];
+const protectedRoutes = ["/articles/new", "/my-articles", "/profile/edit"];
 const authRoutes = ["/login", "/register"];
 
 // Helper function to check if path matches protected route patterns
@@ -29,10 +29,6 @@ export async function proxy(request: NextRequest) {
 
   const isProtected = isProtectedPath(pathname);
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-
-  // if (pathname === "/") {
-  //   return NextResponse.redirect(new URL("/articles", request.url));
-  // }
 
   if (isProtected && !session) {
     return NextResponse.redirect(new URL("/login", request.url));

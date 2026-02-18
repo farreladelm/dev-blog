@@ -3,30 +3,13 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { generateUniqueSlug } from "@/lib/slug";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { STATUS } from "@/constants/article";
 import { ActionResult, ActionState, ArticleDraft } from "@/lib/types";
-import { cookies, headers } from "next/headers";
 import { Article, Prisma } from "@/app/generated/prisma/client";
 import { redis } from "@/lib/redis";
-
-const tagSchema = z
-  .string()
-  .min(1, "Tag cannot be empty")
-  .max(30, "Tag is too long")
-  .regex(/^\S+$/, "Tag must not contain spaces");
-
-const articleSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Title cannot be empty")
-    .max(200, "Title is too long"),
-  body: z.string().min(1, "Body cannot be empty"),
-  tags: z.array(tagSchema).optional(),
-  status: z.enum([STATUS.DRAFT, STATUS.PUBLISHED]).optional(),
-});
+import { articleSchema, formatZodFieldErrors, getFingerprint } from "./helpers";
 
 type CreateArticleActionState = ActionState<
   "title" | "body" | "tags" | "status",
@@ -53,16 +36,9 @@ export async function submitArticleForm(
     });
 
     if (!parsedData.success) {
-      const fieldErrors = z.flattenError(parsedData.error).fieldErrors;
-
       return {
         success: false,
-        fieldErrors: {
-          title: fieldErrors.title?.[0],
-          body: fieldErrors.body?.[0],
-          tags: fieldErrors.tags?.[0],
-          status: fieldErrors.status?.[0],
-        },
+        fieldErrors: formatZodFieldErrors(parsedData.error),
       };
     }
 
@@ -150,16 +126,9 @@ export async function submitArticleUpdateForm(
     });
 
     if (!parsedData.success) {
-      const fieldErrors = z.flattenError(parsedData.error).fieldErrors;
-
       return {
         success: false,
-        fieldErrors: {
-          title: fieldErrors.title?.[0],
-          body: fieldErrors.body?.[0],
-          tags: fieldErrors.tags?.[0],
-          status: fieldErrors.status?.[0],
-        },
+        fieldErrors: formatZodFieldErrors(parsedData.error),
       };
     }
 
@@ -230,8 +199,6 @@ export async function deleteArticle(id: string) {
     if (!article || article.authorId !== session.userId) {
       return { success: false, error: "Unauthorized" };
     }
-
-    console.log(article);
 
     await prisma.article.delete({ where: { id } });
 
@@ -372,21 +339,6 @@ export async function toggleArticleStatus(slug: string) {
     console.error("Error on toggling article status:", error);
     return { success: false, error: "Cannot change article status" };
   }
-}
-
-async function getFingerprint(articleId: string): Promise<string> {
-  const headerStore = await headers();
-  const ip = headerStore.get("x-forwarded-for") ?? "unknown";
-  const userAgent = headerStore.get("user-agent") ?? "";
-
-  const raw = `${ip}-${userAgent}-${articleId}`;
-  const buffer = await crypto.subtle.digest(
-    "SHA-256",
-    new TextEncoder().encode(raw),
-  );
-  return Array.from(new Uint8Array(buffer))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
 }
 
 export async function incrementView(

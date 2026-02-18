@@ -31,18 +31,25 @@ export async function searchTags(
   }
 }
 
-export async function getPopularTags(limit = 10) {
-  const tags = await prisma.tag.findMany({
-    orderBy: {
-      posts: {
-        _count: "desc",
+export async function getPopularTags(
+  limit = 10,
+): Promise<ActionResult<{ tags: string[] }>> {
+  try {
+    const tags = await prisma.tag.findMany({
+      orderBy: {
+        posts: {
+          _count: "desc",
+        },
       },
-    },
-    take: limit,
-    select: {
-      name: true,
-    },
-  });
+      take: limit,
+      select: {
+        name: true,
+      },
+    });
 
-  return tags.map((t) => t.name);
+    return { success: true, data: { tags: tags.map((t) => t.name) } };
+  } catch (error) {
+    console.error("Error getting popular tags:", error);
+    return { success: false, error: "Failed to get popular tags" };
+  }
 }

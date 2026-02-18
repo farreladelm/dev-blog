@@ -13,4 +13,5 @@ export {
   getArticleForEditing,
   getArticlesByAuthor,
   getPublishedArticles,
+  getPublishedArticlesOfTag,
 } from "./query";
