@@ -16,7 +16,7 @@ export default function Error({ error, reset }: ErrorProps) {
     return (
         <div className="flex flex-col items-center justify-center h-[calc(100vh-100px)] gap-4 px-4 text-center">
             <h2 className="text-3xl font-bold">{error.message}</h2>
-            <p className="text-muted-foreground">Make sure that the tag name was correct.</p>
+            <p className="text-muted-foreground">Something went wrong. Please try again later.</p>
             <Button onClick={reset}>Try again</Button>
         </div>
     );
