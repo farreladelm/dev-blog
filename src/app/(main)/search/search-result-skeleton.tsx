@@ -1,7 +1,7 @@
 import ArticleListSkeleton from "@/components/article/article-list-skeleton";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
-import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SearchResultSkeleton({ query }: { query: string }) {

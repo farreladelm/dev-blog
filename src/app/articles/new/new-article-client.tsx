@@ -68,7 +68,7 @@ export default function NewArticleClient({ session = null }: NewArticleClientPro
             const { article, authorUsername } = data.data;
             const destination = article.status === STATUS.DRAFT
                 ? "/my-articles"
-                : `/articles/${article.id}`;
+                : `/articles/${article.slug}`;
             router.push(destination);
             return;
         }
