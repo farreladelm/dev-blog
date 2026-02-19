@@ -188,19 +188,19 @@ export async function submitArticleUpdateForm(
   }
 }
 
-export async function deleteArticle(id: string) {
+export async function deleteArticle(slug: string) {
   try {
     const session = await getSession();
     if (!session) {
       return { success: false, error: "Unauthenticated" };
     }
 
-    const article = await prisma.article.findUnique({ where: { id } });
+    const article = await prisma.article.findUnique({ where: { slug } });
     if (!article || article.authorId !== session.userId) {
       return { success: false, error: "Unauthorized" };
     }
 
-    await prisma.article.delete({ where: { id } });
+    await prisma.article.delete({ where: { slug } });
 
     revalidatePath("/articles");
     revalidatePath(`/${session.username}/articles`);
