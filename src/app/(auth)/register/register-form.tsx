@@ -25,7 +25,6 @@ export function RegisterForm() {
 
   const [data, action, isPending] = useActionState(registerAction, undefined);
 
-
   return (
     <div className="flex flex-col gap-6">
       <Card>
@@ -48,6 +47,8 @@ export function RegisterForm() {
                   type="email"
                   name="email"
                   placeholder="m@example.com"
+                  key={data?.submittedData?.email ?? ""}
+                  defaultValue={data?.submittedData?.email ?? ""}
                   required
                 />
                 {data?.fieldErrors?.email && (
@@ -61,6 +62,8 @@ export function RegisterForm() {
                   type="text"
                   name="username"
                   placeholder="example_user"
+                  key={data?.submittedData?.username ?? ""}
+                  defaultValue={data?.submittedData?.username ?? ""}
                   required
                 />
                 {data?.fieldErrors?.username && (
@@ -74,6 +77,15 @@ export function RegisterForm() {
                 <Input id="password" type="password" name="password" placeholder="password..." required />
                 {data?.fieldErrors?.password && (
                   <small className="text-sm text-red-600">{data.fieldErrors.password}</small>
+                )}
+              </Field>
+              <Field>
+                <div className="flex items-center">
+                  <FieldLabel htmlFor="passwordConfirmation">Password Confirmation</FieldLabel>
+                </div>
+                <Input id="passwordConfirmation" type="password" name="passwordConfirmation" placeholder="confirm password..." required />
+                {data?.fieldErrors?.passwordConfirmation && (
+                  <small className="text-sm text-red-600">{data.fieldErrors.passwordConfirmation}</small>
                 )}
               </Field>
               <Field>

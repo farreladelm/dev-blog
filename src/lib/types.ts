@@ -18,7 +18,7 @@ export type ActionState<TFields extends string, TData = never> =
   | undefined;
 
 export type RegisterActionState = ActionState<
-  "email" | "username" | "password"
+  "email" | "username" | "password" | "passwordConfirmation"
 >;
 
 export type LoginActionState = ActionState<"email" | "password">;

@@ -150,9 +150,11 @@ ArticleTag (join table)
 | `/register`            | User registration   | No                |
 | `/`                    | Global article feed | No                |
 | `/articles/:slug`      | Read single article | No                |
-| `/articles/new`        | Create new article  | Yes               |
+| `/articles/new`        | Create new article  | Yes (author only) |
 | `/articles/:slug/edit` | Edit article        | Yes (author only) |
-| `/profile/:username`   | User profile        | No                |
+| `/my-articles`         | List of articles    | Yes (author only) |
+| `/:username`           | User profile        | No                |
+| `/profile/edit`        | User profile        | Yes (author only) |
 
 ## Authorization Rules
 
@@ -198,13 +200,13 @@ ArticleTag (join table)
 
 ```bash
 # Create a new migration
-npx prisma migrate dev --name description
+pnpm dlx prisma migrate dev --name description
 
 # Reset database (warning: destructive)
-npx prisma migrate reset
+pnpm dlx prisma migrate reset
 
 # Open Prisma Studio (database GUI)
-npx prisma studio
+pnpm dlx prisma studio
 ```
 
 ### Type Safety

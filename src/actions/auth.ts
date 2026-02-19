@@ -12,15 +12,21 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { LoginActionState, RegisterActionState } from "@/lib/types";
 
-const registerSchema = z.object({
-  email: z.email(),
-  username: z
-    .string()
-    .min(3)
-    .max(20)
-    .regex(/^[a-zA-Z0-9_-]+$/),
-  password: z.string().min(8),
-});
+const registerSchema = z
+  .object({
+    email: z.email(),
+    username: z
+      .string()
+      .min(3)
+      .max(20)
+      .regex(/^[a-zA-Z0-9_-]+$/),
+    password: z.string().min(8),
+    passwordConfirmation: z.string().min(8),
+  })
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "Passwords don't match",
+    path: ["passwordConfirmation"],
+  });
 
 const loginSchema = z.object({
   email: z.email(),
@@ -31,11 +37,18 @@ export async function registerAction(
   _: RegisterActionState,
   formData: FormData,
 ): Promise<RegisterActionState> {
+  const submittedData = {
+    email: typeof formData.get("email") === "string" ? String(formData.get("email")) : "",
+    username:
+      typeof formData.get("username") === "string" ? String(formData.get("username")) : "",
+  };
+
   try {
     const parsed = registerSchema.safeParse({
       email: formData.get("email"),
       username: formData.get("username"),
       password: formData.get("password"),
+      passwordConfirmation: formData.get("passwordConfirmation"),
     });
 
     if (!parsed.success) {
@@ -46,7 +59,9 @@ export async function registerAction(
           email: fieldErrors.email?.[0],
           username: fieldErrors.username?.[0],
           password: fieldErrors.password?.[0],
+          passwordConfirmation: fieldErrors.passwordConfirmation?.[0],
         },
+        submittedData,
       };
     }
 
@@ -59,7 +74,11 @@ export async function registerAction(
     });
 
     if (existingUser) {
-      return { success: false, error: "Email or username already exists" };
+      return {
+        success: false,
+        error: "Email or username already exists",
+        submittedData,
+      };
     }
 
     const hashedPassword = await hashPassword(data.password);
@@ -77,9 +96,9 @@ export async function registerAction(
   } catch (error) {
     console.log(error);
     if (error instanceof z.ZodError) {
-      return { success: false, error: error.message };
+      return { success: false, error: error.message, submittedData };
     }
-    return { success: false, error: "Registration failed" };
+    return { success: false, error: "Registration failed", submittedData };
   }
 
   redirect("/");
