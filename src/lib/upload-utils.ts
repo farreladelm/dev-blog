@@ -91,7 +91,7 @@ export function validateAvatarFile(file: File): string | null {
   const validation = avatarImageSchema.safeParse(file);
 
   if (!validation.success) {
-    const errors = validation.error.flatten().formErrors;
+    const errors = z.flattenError(validation.error).formErrors;
     return errors[0] || "Invalid file";
   }
 

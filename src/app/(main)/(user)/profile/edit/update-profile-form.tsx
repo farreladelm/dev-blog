@@ -26,6 +26,8 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
     const [data, action, isPending] = useActionState(updateProfileWithUsernameAction, undefined);
     const [imageError, setImageError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [removeAvatar, setRemoveAvatar] = useState(false);
+    const [selectedAvatarUrl, setSelectedAvatarUrl] = useState<string | null>(null);
 
     // Character count states
     const [bioCount, setBioCount] = useState(user.bio?.length || 0);
@@ -45,6 +47,16 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
     const fieldErrors = data?.success === false ? data.fieldErrors : undefined;
 
     const formValues = data?.success === false && data.submittedData ? data.submittedData : user;
+
+    useEffect(() => {
+        setRemoveAvatar(false);
+        setSelectedAvatarUrl((prev) => {
+            if (prev) {
+                URL.revokeObjectURL(prev);
+            }
+            return null;
+        });
+    }, [formValues.avatarImage, formValues.username]);
 
     const handleCancel = () => {
         toast.info("Changes reverted back to original profile details");
@@ -83,7 +95,33 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
-        validateImageFile(file);
+        if (!validateImageFile(file)) {
+            setSelectedAvatarUrl((prev) => {
+                if (prev) {
+                    URL.revokeObjectURL(prev);
+                }
+                return null;
+            });
+            return;
+        }
+
+        if (file && file.size > 0) {
+            setRemoveAvatar(false);
+            const objectUrl = URL.createObjectURL(file);
+            setSelectedAvatarUrl((prev) => {
+                if (prev) {
+                    URL.revokeObjectURL(prev);
+                }
+                return objectUrl;
+            });
+        } else {
+            setSelectedAvatarUrl((prev) => {
+                if (prev) {
+                    URL.revokeObjectURL(prev);
+                }
+                return null;
+            });
+        }
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -99,9 +137,32 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
         }
     };
 
+    const handleRemoveAvatar = () => {
+        setImageError(null);
+        setRemoveAvatar(true);
+        setSelectedAvatarUrl((prev) => {
+            if (prev) {
+                URL.revokeObjectURL(prev);
+            }
+            return null;
+        });
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
+    useEffect(() => {
+        return () => {
+            if (selectedAvatarUrl) {
+                URL.revokeObjectURL(selectedAvatarUrl);
+            }
+        };
+    }, [selectedAvatarUrl]);
+
     return (
         <form className="flex flex-col w-full max-w-2xl gap-4 mx-auto px-4 lg:px-0" action={action} onSubmit={handleSubmit}>
             <Link href={`/${user.username}`} className="text-3xl text-red-300 font-bold">@{user.username}</Link>
+            <input type="hidden" name="removeAvatar" value={removeAvatar ? "true" : "false"} />
             <Card>
                 <CardHeader>
                     <CardTitle>User Details</CardTitle>
@@ -152,17 +213,31 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
                         <Field data-invalid={!!fieldErrors?.avatarImage || !!imageError}>
                             <FieldLabel htmlFor="avatarImage">Profile Image</FieldLabel>
                             <FieldDescription>Upload an image (JPEG, PNG, GIF, or WebP) under 5MB</FieldDescription>
-                            <div className="flex gap-4 items-center">
-                                <ProfileAvatar username={formValues.username} imageUrl={formValues.avatarImage} />
-                                <Input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    id="avatarImage"
-                                    name="avatarImage"
-                                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                                    onChange={handleFileChange}
-                                    aria-invalid={!!fieldErrors?.avatarImage || !!imageError}
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+                                <ProfileAvatar
+                                    username={formValues.username}
+                                    imageUrl={removeAvatar ? null : (selectedAvatarUrl ?? formValues.avatarImage)}
                                 />
+                                <div className="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center">
+                                    <Input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        id="avatarImage"
+                                        name="avatarImage"
+                                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                                        onChange={handleFileChange}
+                                        aria-invalid={!!fieldErrors?.avatarImage || !!imageError}
+                                    />
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        className="cursor-pointer"
+                                        onClick={handleRemoveAvatar}
+                                        disabled={isPending || (!formValues.avatarImage && !removeAvatar)}
+                                    >
+                                        Remove
+                                    </Button>
+                                </div>
                             </div>
                             {imageError && (
                                 <FieldError>{imageError}</FieldError>

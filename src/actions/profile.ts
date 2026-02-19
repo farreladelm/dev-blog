@@ -96,6 +96,8 @@ export async function updateProfile(
       availableFor: formData.get("availableFor") || undefined,
     };
 
+    const removeAvatar = formData.get("removeAvatar") === "true";
+
     const parsed = updateProfileSchema.safeParse(rawData);
 
     if (!parsed.success) {
@@ -127,32 +129,41 @@ export async function updateProfile(
       availableFor,
     } = parsed.data;
 
-    // Handle avatar image upload
-    let avatarImagePath: string | null = null;
+    // Handle avatar changes (upload or remove)
+    let avatarUpdate: string | null | undefined = undefined;
     const avatarFile = formData.get("avatarImage") as File | null;
+    const shouldUpload = !!avatarFile && avatarFile.size > 0;
+    const shouldRemove = removeAvatar && !shouldUpload;
 
-    if (avatarFile && avatarFile.size > 0) {
-      const uploadResult = await uploadAvatar(avatarFile, session.userId);
-
-      if (!uploadResult.success) {
-        return {
-          success: false,
-          fieldErrors: {
-            avatarImage: uploadResult.error,
-          },
-        };
-      }
-
-      avatarImagePath = uploadResult.path;
-
-      // Delete old avatar if exists
+    if (shouldUpload || shouldRemove) {
       const currentUser = await prisma.user.findUnique({
         where: { id: session.userId },
         select: { avatarImage: true },
       });
 
-      if (currentUser?.avatarImage) {
-        await deleteAvatar(currentUser.avatarImage);
+      if (shouldUpload) {
+        const uploadResult = await uploadAvatar(avatarFile as File, session.userId);
+
+        if (!uploadResult.success) {
+          return {
+            success: false,
+            fieldErrors: {
+              avatarImage: uploadResult.error,
+            },
+          };
+        }
+
+        avatarUpdate = uploadResult.path;
+
+        if (currentUser?.avatarImage) {
+          await deleteAvatar(currentUser.avatarImage);
+        }
+      } else if (shouldRemove) {
+        if (currentUser?.avatarImage) {
+          await deleteAvatar(currentUser.avatarImage);
+        }
+
+        avatarUpdate = null;
       }
     }
 
@@ -174,7 +185,7 @@ export async function updateProfile(
             : null,
         availableFor:
           availableFor && availableFor.length > 0 ? availableFor : null,
-        ...(avatarImagePath && { avatarImage: avatarImagePath }),
+        ...(avatarUpdate !== undefined ? { avatarImage: avatarUpdate } : {}),
       },
     });
 
