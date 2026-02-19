@@ -81,10 +81,10 @@ export const ArticleActionDialog = ({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent>
+            <DialogContent >
                 <DialogHeader>
-                    <DialogTitle className="leading-relaxed">{config.title(articleTitle)}</DialogTitle>
-                    <DialogDescription>
+                    <DialogTitle className="leading-relaxed text-left">{config.title(articleTitle)}</DialogTitle>
+                    <DialogDescription className="text-left">
                         {config.description}
                     </DialogDescription>
                 </DialogHeader>

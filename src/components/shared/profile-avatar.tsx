@@ -1,4 +1,3 @@
-import React from "react";
 import { avatarVariants, getAvatarFallback } from "@/lib/avatarFallback";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
@@ -8,7 +7,7 @@ type ProfileAvatarProps = {
     classname?: string
 }
 
-function ProfileAvatar({ username, imageUrl, classname = "" }: ProfileAvatarProps) {
+export default function ProfileAvatar({ username, imageUrl, classname = "" }: ProfileAvatarProps) {
     const safeUsername = username?.trim() || undefined;
     const safeImageUrl = imageUrl?.trim() || undefined;
     const { initials, colorIndex } = getAvatarFallback(safeUsername);
@@ -25,8 +24,6 @@ function ProfileAvatar({ username, imageUrl, classname = "" }: ProfileAvatarProp
             <AvatarFallback className={avatarVariants[colorIndex]}>{initials}</AvatarFallback>
         </Avatar>
     )
-}
+};
 
-const MemoizedProfileAvatar = React.memo(ProfileAvatar);
 
-export default MemoizedProfileAvatar;

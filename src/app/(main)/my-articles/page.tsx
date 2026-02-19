@@ -16,7 +16,7 @@ export default async function Page() {
     const result = await getArticlesByAuthor(session.username);
 
     if (!result.success) {
-        return <h1>Error</h1>;
+        throw new Error(result.error || "Failed to load articles");
     }
 
     const articles = result.data;
@@ -40,7 +40,7 @@ export default async function Page() {
                 </CardHeader>
                 <CardContent>
                     {articles && articles.length > 0 ? (
-                        <ArticleList articles={articles!} userId={userId} />
+                        <ArticleList articles={articles} userId={userId} />
                     ) : (
                         <Card>
                             <CardContent className="items-center">

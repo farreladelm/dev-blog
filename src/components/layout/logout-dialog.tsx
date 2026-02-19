@@ -43,12 +43,12 @@ export const LogoutDialog = ({ trigger, triggerClassName }: LogoutDialogProps) =
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
-                    <DialogDescription>
+                    <DialogTitle className="text-left">Are you absolutely sure?</DialogTitle>
+                    <DialogDescription className="text-left">
                         This will log you out of your account.
                     </DialogDescription>
                 </DialogHeader>
-                <DialogFooter>
+                <DialogFooter className="justify-center">
                     <form action={action}>
                         <Button variant="outline" type="submit" disabled={isPending}>
                             {isPending ? (
