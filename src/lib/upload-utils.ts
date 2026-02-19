@@ -1,7 +1,6 @@
 // lib/upload-utils.ts (or utils/file-upload.ts)
-import { writeFile, mkdir, unlink } from "fs/promises";
-import { join } from "path";
 import { z } from "zod";
+import { del, put } from "@vercel/blob";
 
 // Avatar validation schema
 export const avatarImageSchema = z
@@ -21,7 +20,7 @@ export type UploadAvatarResult =
   | { success: false; error: string };
 
 /**
- * Uploads an avatar image to the public/avatars directory
+ * Uploads an avatar image to Vercel Blob
  * @param file - The file to upload
  * @param userId - The user ID to use in the filename
  * @returns The relative path to the uploaded file or an error
@@ -34,7 +33,7 @@ export async function uploadAvatar(
   const validation = avatarImageSchema.safeParse(file);
 
   if (!validation.success) {
-    const errors = validation.error.flatten().formErrors;
+    const errors = z.flattenError(validation.error).formErrors;
     return { success: false, error: errors[0] || "Invalid file" };
   }
 
@@ -44,22 +43,14 @@ export async function uploadAvatar(
     const fileExtension = file.name.split(".").pop();
     const fileName = `${userId}-${timestamp}.${fileExtension}`;
 
-    // Define upload directory
-    const uploadDir = join(process.cwd(), "public", "avatars");
+    const blob = await put(fileName, file, {
+      access: "public",
+      addRandomSuffix: true,
+      contentType: file.type || undefined,
+    });
 
-    // Ensure directory exists
-    await mkdir(uploadDir, { recursive: true });
-
-    // Convert file to buffer
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    // Save file
-    const filePath = join(uploadDir, fileName);
-    await writeFile(filePath, buffer);
-
-    // Return relative path for database
-    return { success: true, path: `/avatars/${fileName}` };
+    // Return URL for database
+    return { success: true, path: blob.url };
   } catch (error) {
     console.error("Error uploading avatar:", error);
     return { success: false, error: "Failed to upload image" };
@@ -67,15 +58,22 @@ export async function uploadAvatar(
 }
 
 /**
- * Deletes an avatar file from the public directory
- * @param avatarPath - The relative path to the avatar (e.g., /avatars/user-123.jpg)
+ * Deletes an avatar file from Vercel Blob
+ * @param avatarPath - The blob URL (or pathname) of the avatar
  */
 export async function deleteAvatar(avatarPath: string): Promise<void> {
   if (!avatarPath) return;
 
   try {
-    const filePath = join(process.cwd(), "public", avatarPath);
-    await unlink(filePath);
+    const isLikelyLocalPath =
+      avatarPath.startsWith("/avatars/") || avatarPath.startsWith("avatars/");
+
+    if (isLikelyLocalPath) {
+      // Legacy local uploads can't be deleted from Blob.
+      return;
+    }
+
+    await del(avatarPath);
   } catch (error) {
     // Ignore if file doesn't exist
     console.log("Avatar file not found or couldn't be deleted:", avatarPath);

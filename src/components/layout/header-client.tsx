@@ -42,41 +42,53 @@ const guestLinks: NavLink[] = [
     { label: "Create Account", href: "/register" },
 ];
 
-const DesktopAuthNav = ({ authUser }: { authUser: SessionUser }) => (
-    <nav className="hidden items-center gap-4 md:flex">
-        <Button variant="outline" className="hidden lg:flex" asChild>
-            <Link href="/articles/new">
-                <IoAdd />
-                <span>New Article</span>
-            </Link>
-        </Button>
-        <DropdownMenu>
-            <DropdownMenuTrigger className="cursor-pointer">
-                <ProfileAvatar
-                    username={authUser.username}
-                    imageUrl={authUser.avatarImage}
-                />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" sideOffset={10}>
-                <DropdownMenuLabel className="overflow-hidden text-ellipsis">
-                    {authUser.name}
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    {getAuthLinks(authUser).map((link) => (
-                        <DropdownMenuItem key={link.href}>
-                            <Link href={link.href} className="w-full hover:underline">
-                                {link.label}
-                            </Link>
-                        </DropdownMenuItem>
-                    ))}
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <LogoutDialog />
-            </DropdownMenuContent>
-        </DropdownMenu>
-    </nav>
-);
+const DesktopAuthNav = ({ authUser }: { authUser: SessionUser }) => {
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) {
+        return null;
+    }
+
+    return (
+        <nav className="hidden items-center gap-4 md:flex">
+            <Button variant="outline" className="hidden lg:flex" asChild>
+                <Link href="/articles/new">
+                    <IoAdd />
+                    <span>New Article</span>
+                </Link>
+            </Button>
+            <DropdownMenu>
+                <DropdownMenuTrigger className="cursor-pointer">
+                    <ProfileAvatar
+                        username={authUser.username}
+                        imageUrl={authUser.avatarImage}
+                    />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" sideOffset={10}>
+                    <DropdownMenuLabel className="overflow-hidden text-ellipsis">
+                        {authUser.name}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        {getAuthLinks(authUser).map((link) => (
+                            <DropdownMenuItem key={link.href}>
+                                <Link href={link.href} className="w-full hover:underline">
+                                    {link.label}
+                                </Link>
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <LogoutDialog />
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </nav>
+    )
+};
 
 const DesktopGuestNav = () => (
     <nav className="hidden space-x-4 md:block">
