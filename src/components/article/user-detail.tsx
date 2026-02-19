@@ -9,7 +9,7 @@ type UserDetailProps = {
 
 export default function UserDetail({ username, name, imageUrl }: UserDetailProps) {
     return (
-        <Link href={`/profile/${username}`} className="w-fit group">
+        <Link href={`/${username}`} className="w-fit group">
             <div className="py-2 flex items-center gap-3 w-fit">
                 <ProfileAvatar username={username} imageUrl={imageUrl} />
                 <div className="flex flex-col">
