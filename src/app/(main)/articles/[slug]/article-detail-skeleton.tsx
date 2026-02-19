@@ -38,12 +38,13 @@ export default function ArticleDetailSkeleton() {
 
                 </CardHeader>
                 <CardContent className="max-w-none pt-6 border-t space-y-4">
-                    <Skeleton className="w-3/4 h-8 rounded-md mb-8" />
-                    <Skeleton className="w-1/2 h-8 rounded-md" />
+                    <Skeleton className="w-full h-8 rounded-md mb-8" />
+                    <Skeleton className="w-full h-8 rounded-md" />
                     <Skeleton className="w-3/4 h-8 rounded-md" />
+                    <Skeleton className="w-1/2 h-8 rounded-md" />
                     <Skeleton className="w-3/4 h-8 rounded-md mb-16" />
                     <Skeleton className="w-1/2 h-8 rounded-md" />
-                    <Skeleton className="w-3/4 h-8 rounded-md" />
+                    <Skeleton className="w-full h-8 rounded-md" />
                     <Skeleton className="w-3/4 h-8 rounded-md" />
                 </CardContent>
             </Card>

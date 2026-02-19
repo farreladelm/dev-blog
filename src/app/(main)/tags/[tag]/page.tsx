@@ -1,17 +1,14 @@
 import { getPopularTags } from "@/actions/tag";
-import Tag from "@/components/article/tag";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Item, ItemActions, ItemContent, ItemTitle } from "@/components/ui/item";
 import { Hash } from "lucide-react";
 import { Suspense } from "react";
 import ArticleListOfTag from "./article-list-of-tag";
 import ArticleListOfTagSkeleton from "./article-list-of-tag-skeleton";
+import PopularTags from "@/components/shared/popular-tags";
+import PopularTagsSkeleton from "@/components/shared/popular-tags-skeleton";
 
 export default async function TagPage({ params }: { params: Promise<{ tag: string }> }) {
     const { tag } = await params;
-    const popularTagResult = await getPopularTags(10);
-
-    const tags = popularTagResult.success ? popularTagResult.data.tags : [];
 
     return (
         <>
@@ -32,14 +29,9 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
             </Card>
             <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-4 max-w-4xl mx-auto p-4 lg:p-0">
                 <aside className="w-full shrink-0">
-                    <Item>
-                        <ItemContent>
-                            <ItemTitle>Popular Tags</ItemTitle>
-                        </ItemContent>
-                        <ItemActions className="flex flex-wrap gap-1">
-                            {tags && (tags).map(tag => <Tag title={tag} key={tag} />)}
-                        </ItemActions>
-                    </Item>
+                    <Suspense fallback={<PopularTagsSkeleton />}>
+                        <PopularTags />
+                    </Suspense>
                 </aside>
                 <Suspense fallback={<ArticleListOfTagSkeleton />}>
                     <ArticleListOfTag tag={tag} />

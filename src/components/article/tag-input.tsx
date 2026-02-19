@@ -36,10 +36,11 @@ export default function TagInput({ value, onChange }: Props) {
             // Case 1: input focused, but empty → popular tags
             if (isFocused && !debouncedInput.trim()) {
                 setLoading(true);
-                const result = await getPopularTags();
+                const getPopularTagsResult = await getPopularTags();
+                const tags = getPopularTagsResult.success ? getPopularTagsResult.data.tags : [];
 
                 if (active) {
-                    setSuggestions(result.filter((t) => !value.includes(t)));
+                    setSuggestions(tags.filter((t) => !value.includes(t)));
                     setLoading(false);
                 }
                 return;
@@ -48,10 +49,11 @@ export default function TagInput({ value, onChange }: Props) {
             // Case 2: user is typing → search
             if (debouncedInput.trim()) {
                 setLoading(true);
-                const result = await searchTags(debouncedInput);
+                const searchTagsResult = await searchTags(debouncedInput);
+                const tags = searchTagsResult.success ? searchTagsResult.data.tags : [];
 
-                if (active && result.success) {
-                    setSuggestions(result.data.tags.filter((t) => !value.includes(t)));
+                if (active && searchTagsResult.success) {
+                    setSuggestions(tags.filter((t) => !value.includes(t)));
                     setLoading(false);
                 }
                 return;

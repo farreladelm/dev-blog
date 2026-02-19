@@ -18,7 +18,7 @@ export default async function ArticleDetail({ article, userId, isLikedByCurrentU
     const isAuthor = userId && userId === article.authorId;
 
     return (
-        <article className="flex justify-center w-full gap-4 lg:px-20">
+        <article className="flex justify-center w-full gap-4 lg:px-20 px-4">
 
             <Card className="w-full max-w-4xl">
                 <CardHeader>
@@ -32,7 +32,7 @@ export default async function ArticleDetail({ article, userId, isLikedByCurrentU
                         </div>
                     </Link>
                     <CardTitle>
-                        <h1 className="text-4xl font-bold">
+                        <h1 className="text-2xl lg:text-4xl font-bold">
                             {article?.title}
                         </h1>
                     </CardTitle>

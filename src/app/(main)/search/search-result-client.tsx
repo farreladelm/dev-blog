@@ -148,19 +148,14 @@ export default function SearchResultClient({
     };
 
     return (
-        <div className="max-w-4xl mx-auto relative">
+        <div className="max-w-4xl mx-auto relative px-4 lg:px-0">
             <Item className="sticky top-0 z-40 px-0">
                 <ItemContent>
                     <ItemTitle>Search</ItemTitle>
                     <ItemDescription>Search result for "{query}"</ItemDescription>
                 </ItemContent>
-                <ItemActions>
-                    <Button variant="link" className="font-bold cursor-pointer">Most Relevant</Button>
-                    <Button variant="link" className="cursor-pointer">Newest</Button>
-                    <Button variant="link" className="cursor-pointer">Oldest</Button>
-                </ItemActions>
             </Item>
-            <div className="grid grid-cols-[280px_1fr] gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-4">
                 <ButtonGroup className="w-full shrink-0" orientation="vertical">
                     <Button
                         variant={activeTab === 'articles' ? 'secondary' : 'outline'}

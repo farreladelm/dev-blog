@@ -42,8 +42,6 @@ export default function EditArticleClient({ article, session = null }: EditArtic
     useEffect(() => {
         if (!data) return;
 
-        console.log("Update Article Action Data:", data);
-
         if (data.success) {
             toast.success("Article updated successfully!");
             router.push(`/articles/${data.data.article.slug}`);

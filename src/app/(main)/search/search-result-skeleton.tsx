@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SearchResultSkeleton({ query }: { query: string }) {
     return (
-        <div className="max-w-4xl mx-auto relative">
+        <div className="max-w-4xl mx-auto relative px-4 lg:px-0">
             <Item className="sticky top-0 z-40">
                 <ItemContent>
                     <ItemTitle>Search</ItemTitle>
@@ -18,7 +18,7 @@ export default function SearchResultSkeleton({ query }: { query: string }) {
                     <Button variant="link" className="cursor-pointer">Oldest</Button>
                 </ItemActions>
             </Item>
-            <div className="grid grid-cols-[280px_1fr] gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-4">
                 <ButtonGroup className="w-full shrink-0" orientation="vertical">
                     <Button
                         variant="outline"

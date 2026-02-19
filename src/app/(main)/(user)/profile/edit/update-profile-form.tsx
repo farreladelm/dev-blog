@@ -100,7 +100,7 @@ function UpdateProfileFormInner({ user, onCancel }: { user: User; onCancel: () =
     };
 
     return (
-        <form className="flex flex-col w-full max-w-2xl gap-4 mx-auto" action={action} onSubmit={handleSubmit}>
+        <form className="flex flex-col w-full max-w-2xl gap-4 mx-auto px-4 lg:px-0" action={action} onSubmit={handleSubmit}>
             <Link href={`/${user.username}`} className="text-3xl text-red-300 font-bold">@{user.username}</Link>
             <Card>
                 <CardHeader>

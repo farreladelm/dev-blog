@@ -20,7 +20,7 @@ export default function NewArticleHeader(
                     }</h1>
                 </div>
 
-                <nav className="flex gap-2">
+                <nav className="flex gap-2 items-center">
                     <Button
                         className="transition"
                         variant={mode === "edit" ? "default" : "ghost"}
@@ -31,10 +31,13 @@ export default function NewArticleHeader(
                         variant={mode === "preview" ? "default" : "ghost"}
                         onClick={() => onModeChange("preview")}
                     >Preview</Button>
+                    <Link className="block md:hidden h-6 w-6" href="/">
+                        <X className="w-full" />
+                    </Link>
                 </nav>
             </div>
-            <Link href="/">
-                <X className="absolute top-4 right-4 h-6 w-6" />
+            <Link className="hidden md:inline-block absolute top-4 right-4 h-6 w-6" href="/">
+                <X className="w-full" />
             </Link>
         </header>
     )

@@ -6,13 +6,18 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
 
-export default function SearchBar() {
+type SearchBarProps = {
+    onSearch?: () => void;
+};
+
+export default function SearchBar({ onSearch }: SearchBarProps) {
     const [searchValue, setSearchValue] = useState("")
     const router = useRouter()
 
     const handleSearch = () => {
         if (searchValue.trim()) {
             router.push(`/search?q=${encodeURIComponent(searchValue)}`)
+            onSearch?.()
         }
     }
 
@@ -23,7 +28,7 @@ export default function SearchBar() {
     }
 
     return (
-        <ButtonGroup>
+        <ButtonGroup className="w-full md:w-auto">
             <Input
                 placeholder="Type to search..."
                 className="md:w-96"
