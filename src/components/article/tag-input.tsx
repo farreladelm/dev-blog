@@ -80,7 +80,12 @@ export default function TagInput({ value, onChange }: Props) {
         }
 
         const name = tag.trim().toLowerCase();
-        if (!name || value.includes(name)) return;
+        if (!name) return;
+        if (value.includes(name)) {
+            setInput("");
+            setSuggestions([]);
+            return;
+        }
 
         if (!isValidTagChar(name)) {
             toast.warning("Tags can only contain letters (a-z) and numbers.");
@@ -94,6 +99,11 @@ export default function TagInput({ value, onChange }: Props) {
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
+            e.preventDefault();
+            addTag(input);
+        }
+
+        if (e.key === ",") {
             e.preventDefault();
             addTag(input);
         }
@@ -147,13 +157,14 @@ export default function TagInput({ value, onChange }: Props) {
                     onKeyDown={handleKeyDown}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
-                    placeholder="Add up to 3 tags..."
-                    className="flex-1 min-w-30 outline-none bg-transparent"
+                    placeholder="Add up to 3 tags. Duplicate tags will be ignored."
+                    className="flex-1 min-w-30 outline-none bg-transparent placeholder:text-sm"
                 />
 
 
-            </div>
 
+
+            </div>
 
             {
                 suggestions.length > 0 && (

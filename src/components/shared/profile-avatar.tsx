@@ -1,4 +1,4 @@
-import { avatarVariants, getAvatarFallback } from "@/lib/avatarFallback";
+import { avatarVariants, getAvatarFallback } from "@/lib/avatar-fallback";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 type ProfileAvatarProps = {

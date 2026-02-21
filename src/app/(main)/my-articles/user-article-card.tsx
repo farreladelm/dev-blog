@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { dateToMonthAndDate } from "@/lib/dateToString";
+import { dateToMonthAndDate } from "@/lib/date-to-string";
 import { Article } from "@/app/generated/prisma/client";
 import { Ellipsis } from "lucide-react";
 import Link from "next/link";

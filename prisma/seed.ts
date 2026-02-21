@@ -1,8 +1,8 @@
 import { ArticleStatus } from "@/app/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { articlesData } from "./articles.data";
-import { calculateReadingTime } from "../src/lib/calculateReadingTime";
-import { generateUniqueSlug } from "../src/lib/slug";
+import { calculateReadingTime } from "@/lib/calculate-reading-time";
+import { generateUniqueSlug } from "@/lib/slug";
 import { hashPassword } from "@/lib/auth";
 
 async function main() {
