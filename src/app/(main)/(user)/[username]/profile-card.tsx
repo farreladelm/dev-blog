@@ -1,6 +1,5 @@
 import { User } from "@/app/generated/prisma/client"
 import ProfileAvatar from "@/components/shared/profile-avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -11,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import { Link2 } from "lucide-react"
 import Link from "next/link"
-import { IoGlobe, IoLogoGithub } from "react-icons/io5"
+import { IoLogoGithub } from "react-icons/io5"
 
 type ProfileCardProps = {
     user: User;
@@ -38,12 +37,19 @@ export function ProfileCard({ user, isAuthor }: ProfileCardProps) {
             <CardContent className="flex gap-8 justify-center items-center text-xs">
                 <p className="text-muted-foreground">Joined On {user.createdAt.toLocaleDateString("en-US", { month: "short", year: "numeric" })}</p>
 
-                {user.websiteUrl || user.githubUrl &&
+                {
+                    (user.websiteUrl || user.githubUrl) &&
                     <div className="flex gap-4 items-center">
-                        {user.websiteUrl && <Link href={user.websiteUrl} className="underline text-muted-foreground hover:text-foreground"><Link2 className="size-4 mr-1 inline" />{user.websiteUrl}</Link>}
+                        {user.websiteUrl &&
+                            <Link href={user.websiteUrl} className="underline text-muted-foreground hover:text-foreground">
+                                <Link2 className="size-4 mr-1 inline" />{user.websiteUrl}
+                            </Link>
+                        }
                         {user.githubUrl && <Link href={user.githubUrl} className="padding-1 rounded-full border border-transparent hover:border-muted-foreground"><IoLogoGithub className="size-5" /></Link>}
                     </div>
                 }
+
+
 
 
             </CardContent>
