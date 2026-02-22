@@ -8,6 +8,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { dateToMonthAndDate } from "@/lib/date-to-string"
 import { Link2 } from "lucide-react"
 import Link from "next/link"
 import { IoLogoGithub } from "react-icons/io5"
@@ -35,7 +36,7 @@ export function ProfileCard({ user, isAuthor }: ProfileCardProps) {
                 </CardDescription>
             </CardHeader>
             <CardContent className="flex gap-8 justify-center items-center text-xs">
-                <p className="text-muted-foreground">Joined On {user.createdAt.toLocaleDateString("en-US", { month: "short", year: "numeric" })}</p>
+                <p className="text-muted-foreground">Joined On {dateToMonthAndDate(user.createdAt)}</p>
 
                 {
                     (user.websiteUrl || user.githubUrl) &&
